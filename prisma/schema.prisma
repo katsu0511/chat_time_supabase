@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id              Int         @id @default(autoincrement())
+  userId          String      @map("user_id") @unique
+  name            String
+  password        String
+
+  friends         Friend[]    @relation("UserFriends")
+  friendOf        Friend[]    @relation("FriendOfUsers")
+  sendMessage     Message[]   @relation("SenderUser")
+  receiveMessage  Message[]   @relation("ReceiverUser")
+
+  @@map("user")
+}
+
+model Friend {
+  id            Int
+  friendId      Int       @map("friend_id")
+  createdAt     DateTime  @map("created_at")    @default(now())
+  lastReached   DateTime  @map("last_reached")  @default(now()) @updatedAt
+
+  user          User      @relation("UserFriends", fields: [id], references: [id])
+  friend        User      @relation("FriendOfUsers", fields: [friendId], references: [id])
+
+  @@id([id, friendId], name: "friend_pk")
+  @@map("friend")
+}
+
+model Message {
+  messageId   Int       @map("message_id")  @id @default(autoincrement())
+  senderId    Int       @map("sender_id")
+  receiverId  Int       @map("receiver_id")
+  content     String
+  createdAt   DateTime  @map("created_at")  @default(now())
+
+  sender      User      @relation("SenderUser", fields: [senderId], references: [id])
+  receiver    User      @relation("ReceiverUser", fields: [receiverId], references: [id])
+
+  @@map("message")
+}
