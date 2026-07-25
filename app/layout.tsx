@@ -1,6 +1,9 @@
 import './globals.css';
 import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
+import { auth } from '@/lib/getSession';
+import SessionProviderWrapper from '@/components/Templates/SessionProviderWrapper';
+// import { ThemeProviderWrapper } from '@/components/ThemeProviderWrapper';
 import Header from '@/components/Organisms/Header';
 import Main from '@/components/Templates/Main';
 import Footer from '@/components/Organisms/Footer';
@@ -17,12 +20,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang='en' className='select-none' suppressHydrationWarning>
       <body className={fnt.className}>
-        <Header />
-        <Main>{children}</Main>
-        <Footer />
+        <SessionProviderWrapper session={session}>
+          {/* <ThemeProviderWrapper> */}
+            <Header />
+            <Main>{children}</Main>
+            <Footer />
+          {/* </ThemeProviderWrapper> */}
+        </SessionProviderWrapper>
       </body>
     </html>
   );
