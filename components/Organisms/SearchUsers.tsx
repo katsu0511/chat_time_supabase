@@ -42,7 +42,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
           sx: {
             display: 'block',
             border: '2px solid',
-            borderColor: blue,
+            borderColor: blue[500],
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
