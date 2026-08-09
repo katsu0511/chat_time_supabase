@@ -18,25 +18,6 @@ export default function Messages({session, friends}: {session: Session, friends:
     setMessages(contents);
   }, [session.user.id]);
 
-  // useEffect(() => {
-  //   if (!friendId) return;
-  //   // getMessages(friendId);
-
-  //   const ws = new WebSocket(process.env.NEXT_PUBLIC_URL as string);
-  //   ws.onopen = () => {
-  //     console.log('WebSocket connected');
-  //     ws.send(JSON.stringify({ type: 'subscribe', userId: session.user.id, friendId }));
-  //   };
-
-  //   ws.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     if (data.type === 'message') setMessages(prev => [...prev, data.message]);
-  //   };
-  //   // setSocket(ws);
-
-  //   return () => ws.close();
-  // }, [friendId, session.user.id, getMessages]);
-
   useEffect(() => {
     messageContainerRef.current?.scrollTo({
       top: messageContainerRef.current.scrollHeight,
