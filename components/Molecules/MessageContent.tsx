@@ -4,10 +4,10 @@ export default function MessageContent(props: {id: number, message: Message}) {
   const justify = props.id === props.message.senderId ? 'justify-end' : 'justify-start';
   const order = props.id === props.message.senderId ? 'order-0 text-right' : 'order-2 text-left';
   const datetime = dayjs(props.message.createdAt).format('YYYY/MM/DD HH:mm');
-  const speechBubble1 = props.id === props.message.senderId ? 'right-2 bg-[color:var(--color-primary)] rounded-[0_0_100%_0]' : 'left-2 bg-[color:var(--color-background)] rounded-[0_0_0_100%]';
+  const speechBubble1 = props.id === props.message.senderId ? 'right-2 bg-blue-500 rounded-[0_0_100%_0]' : 'left-2 bg-white rounded-[0_0_0_100%]';
   const speechBubble2 = props.id === props.message.senderId ? 'right-1' : 'left-1';
-  const backGround = props.id === props.message.senderId ? 'bg-[color:var(--color-primary)] mr-3' : 'bg-[color:var(--color-background)] ml-3';
-  const color = props.id === props.message.senderId ? 'text-white' : 'text-[color:var(--text-primary)]';
+  const backGround = props.id === props.message.senderId ? 'bg-blue-500 mr-3' : 'bg-white ml-3';
+  const color = props.id === props.message.senderId ? 'text-white' : 'text-blue-500';
 
   return (
     <div className={`flex ${justify} items-end relative w-full min-h-12`}>
