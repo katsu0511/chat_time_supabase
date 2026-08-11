@@ -25,7 +25,12 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const savedMode = localStorage.getItem('themeMode');
-    if (savedMode === 'light' || savedMode === 'dark') setMode(savedMode);
+    if (savedMode === 'light' || savedMode === 'dark') {
+      // localStorage is only available on the client,
+      // so the initial theme must be restored after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMode(savedMode);
+    }
     const savedColor = localStorage.getItem('themeColor');
     if (
       savedColor === ThemeColor.blue ||
