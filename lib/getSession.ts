@@ -1,7 +1,8 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User, Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getUserForLogin, getUser } from '@/lib/getter';
 import { compare } from 'bcrypt';
+import type { JWT } from 'next-auth/jwt';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -30,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     updateAge: 24 * 60 * 60
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT, user: User }) {
       if (user) {
         token.id = user.id;
         token.name = user.name;
@@ -40,11 +41,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
 
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-      }
-
+    async session({ session, token }: { session: Session, token: JWT }) {
+      session.user.id = token.id as string;
       return session;
     },
   },
