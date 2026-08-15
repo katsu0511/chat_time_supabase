@@ -6,7 +6,7 @@ export default function Input(props: {label: string, type: string, value: string
       <label className='block w-20'>{props.label}: </label>
       <input
         type={props.type}
-        className='border-blue-500 border-2 px-2 py-1 outline-none appearance-none'
+        className='border-[color:var(--color-primary)] border-2 px-2 py-1 outline-none appearance-none'
         value={props.value}
         onChange={props.onChange}
         required
