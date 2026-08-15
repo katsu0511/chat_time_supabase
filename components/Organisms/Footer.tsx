@@ -7,7 +7,7 @@ export default function Footer() {
   const { data: session } = useSession();
 
   return (
-    <footer className='bg-blue-500 w-full h-10'>
+    <footer className='bg-[color:var(--color-primary)] w-full h-10'>
       {session
         ? <div className='flex justify-center max-w-screen-xl w-full h-full px-4 mx-auto'>
             <FooterLink display='Chat' url='/'/>
