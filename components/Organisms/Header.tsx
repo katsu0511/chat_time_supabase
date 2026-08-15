@@ -8,7 +8,7 @@ export default function Header() {
   const { data: session } = useSession();
 
   return (
-    <header className='bg-blue-500 w-full h-10'>
+    <header className='bg-[color:var(--color-primary)] w-full h-10'>
       <div className='flex justify-between max-w-screen-xl w-full h-full px-4 mx-auto'>
         {session
           ? <Link href='/' className='text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60'>Chat Time</Link>

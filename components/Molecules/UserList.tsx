@@ -20,7 +20,7 @@ export default function UserList(props: {user: User, myId: string, friendIds: nu
             props.user.id != props.myId &&
             <Button
               variant='contained'
-              color='primary'
+              color='secondary'
               disableElevation={true}
               disabled={props.friendIds.includes(props.user.id as unknown as number)}
               onClick={handleAddFriend}

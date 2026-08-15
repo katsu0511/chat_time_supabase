@@ -1,4 +1,4 @@
-import prisma from './prisma';
+import prisma from '@/lib/prisma';
 import type { User } from 'next-auth';
 
 export async function getUser(userId: string, password: string): Promise<User | null> {

@@ -1,6 +1,6 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { signIn } from 'next-auth/react';
-import { createUser } from './actions';
+import { createUser } from '@/lib/actions';
 
 export const handleLogin = async (
   userId: string,

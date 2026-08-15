@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
-import { blue } from '@mui/material/colors';
 
 export default function SendMessage(props: {senderId: number, receiverId: number | undefined}) {
   const [message, setMessage] = useState('');
+  const context = useContext(ThemeContext);
+  if (!context) return null;
+  const { theme } = context;
 
   const sendMessage = async (senderId: number, receiverId: number | undefined, content: string) => {
     content = content.trim();
@@ -39,7 +42,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
           sx: {
             display: 'block',
             border: '2px solid',
-            borderColor: blue[500],
+            borderColor: theme.palette.secondary.main,
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
@@ -50,7 +53,7 @@ export default function SendMessage(props: {senderId: number, receiverId: number
       />
       <Button
         variant='contained'
-        color='primary'
+        color='secondary'
         disableElevation={true}
         disabled={ props.receiverId == undefined || message.trim() == '' }
         onClick={() => sendMessage(props.senderId, props.receiverId, message)}
