@@ -4,6 +4,7 @@ import type { Session, User } from 'next-auth';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import MessageContent from '@/components/Molecules/MessageContent';
 import SendMessage from '@/components/Molecules/SendMessage';
+import { supabase } from '@/lib/supabase';
 
 export default function Messages({session, friends}: {session: Session, friends: User[]}) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -24,6 +25,41 @@ export default function Messages({session, friends}: {session: Session, friends:
       behavior: 'auto'
     });
   }, [messages]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('messages')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'message',
+        },
+        (payload) => {
+          const newMessage = payload.new;
+          const senderId = Number(newMessage.sender_id);
+          const receiverId = Number(newMessage.receiver_id);
+          const myId = Number(session.user.id);
+
+          if (senderId === myId && receiverId === friendId || senderId === friendId && receiverId === myId) {
+            const message: Message = {
+              messageId: newMessage.message_id,
+              senderId,
+              receiverId,
+              content: newMessage.content,
+              createdAt: newMessage.created_at,
+            };
+            setMessages(prev => [...prev, message]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session.user.id, friendId]);
 
   return (
     <div className='flex w-full h-full md:border-[color:var(--color-primary)] md:border-x-4'>
