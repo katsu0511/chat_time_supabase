@@ -16,6 +16,7 @@ model User {
   id                String      @id @db.Uuid
   name              String
   email             String      @unique
+  language          String      @default("en")
 
   friends           Friend[]    @relation("UserFriends")
   friendOf          Friend[]    @relation("FriendOfUser")
