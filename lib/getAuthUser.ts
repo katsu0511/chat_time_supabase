@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabaseServer';
 
-export async function getSession() {
+export default async function getAuthUser() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) {
