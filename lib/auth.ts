@@ -1,5 +1,5 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { signIn } from 'next-auth/react';
+import { supabase } from '@/lib/supabaseBrowser';
 import { createUser } from '@/lib/actions';
 
 export const handleLogin = async (
@@ -20,15 +20,25 @@ export const handleLogin = async (
 
 export const handleSignup = async (
   name: string,
-  userId: string,
+  email: string,
   password: string,
   router: AppRouterInstance,
   setError: (error: string) => void
 ) => {
-  const user = await createUser({name, userId, password});
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error || !data.user) {
+    console.error('Signup error:', error);
+    setError(error?.message ?? 'Failed to signup');
+    return;
+  }
+  const user = await createUser({
+    id: data.user.id,
+    name,
+    email,
+  });
   if (typeof user === 'string') {
     setError(user);
-    return null;
+    return;
   }
-  handleLogin(userId, password, router, setError);
+  router.push('/');
 };
