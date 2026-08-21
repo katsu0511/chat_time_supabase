@@ -13,16 +13,16 @@ export async function getUsers(name: string): Promise<User[]> {
     where: {
       OR: [
         { name: { contains: name } },
-        { userId: { contains: name } }
+        { email: { contains: name } }
       ]
     }
   });
 }
 
-export async function getFriendIds(id: string): Promise<string[]> {
+export async function getFriendIds(userId: string): Promise<string[]> {
   const friendIds = await prisma.friend.findMany({
     where: {
-      userId: id
+      userId,
     },
     select: {
       friendId: true
@@ -32,10 +32,10 @@ export async function getFriendIds(id: string): Promise<string[]> {
   return friendIds.map((f) => f.friendId);
 }
 
-export async function getFriends(id: string): Promise<User[]> {
+export async function getFriends(userId: string): Promise<User[]> {
   const friends = await prisma.friend.findMany({
     where: {
-      userId: id
+      userId,
     },
     include: {
       friend: true
@@ -50,12 +50,12 @@ export async function getFriends(id: string): Promise<User[]> {
   }));
 }
 
-export async function getMessages(id: string, friendId: string) {
+export async function getMessages(userId: string, friendId: string) {
   return await prisma.message.findMany({
     where: {
       OR: [
-        { senderId: id, receiverId: friendId },
-        { senderId: friendId, receiverId: id }
+        { senderId: userId, receiverId: friendId },
+        { senderId: friendId, receiverId: userId }
       ]
     },
     orderBy: {
