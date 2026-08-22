@@ -1,3 +1,4 @@
+import type { User as AuthUser } from '@supabase/supabase-js';
 import getAuthUser from '@/lib/getAuthUser';
 import { redirect } from 'next/navigation';
 import { FormControl } from '@mui/material';
@@ -5,7 +6,7 @@ import ThemeModeWrapper from '@/components/Organisms/ThemeModeWrapper';
 import ThemeColorWrapper from '@/components/Organisms/ThemeColorWrapper';
 
 export default async function Setting() {
-  const user = await getAuthUser();
+  const user: AuthUser | null = await getAuthUser();
   if (!user) return redirect('/login');
 
   return (
