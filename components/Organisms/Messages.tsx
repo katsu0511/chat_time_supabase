@@ -1,23 +1,22 @@
 'use client';
 
-import type { Session, User } from 'next-auth';
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseBrowser';
 import MessageContent from '@/components/Molecules/MessageContent';
 import SendMessage from '@/components/Molecules/SendMessage';
-import { supabase } from '@/lib/supabase';
 
-export default function Messages({session, friends}: {session: Session, friends: User[]}) {
+export default function Messages({user, friends}: {user: AppUser, friends: AppUser[]}) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [friendId, setFriendId] = useState<number>();
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   const getMessages = useCallback(async (friendId: number) => {
     setFriendId(friendId);
-    const res = await fetch(`/api/getMessages?id=${session.user.id}&friendId=${friendId}`);
+    const res = await fetch(`/api/getMessages?id=${user.id}&friendId=${friendId}`);
     if (!res.ok) setMessages([]);
     const contents: Message[] = await res.json();
     setMessages(contents);
-  }, [session.user.id]);
+  }, [user]);
 
   useEffect(() => {
     messageContainerRef.current?.scrollTo({
@@ -40,7 +39,7 @@ export default function Messages({session, friends}: {session: Session, friends:
           const newMessage = payload.new;
           const senderId = Number(newMessage.sender_id);
           const receiverId = Number(newMessage.receiver_id);
-          const myId = Number(session.user.id);
+          const myId = Number(user.id);
 
           if (senderId === myId && receiverId === friendId || senderId === friendId && receiverId === myId) {
             const message: Message = {
@@ -59,7 +58,7 @@ export default function Messages({session, friends}: {session: Session, friends:
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [session.user.id, friendId]);
+  }, [user, friendId]);
 
   return (
     <div className='flex w-full h-full md:border-[color:var(--color-primary)] md:border-x-4'>
@@ -72,7 +71,7 @@ export default function Messages({session, friends}: {session: Session, friends:
                 onClick={() => getMessages(Number(friend.id))}
               >
                 <p className='w-full h-[50%] text-2xl leading-10 text-left'>{friend.name}</p>
-                <p className='w-full h-[50%] text-lg leading-10 text-left'>{friend.userId}</p>
+                <p className='w-full h-[50%] text-lg leading-10 text-left'>{friend.email}</p>
               </button>
             </li>
           ))}
@@ -81,13 +80,13 @@ export default function Messages({session, friends}: {session: Session, friends:
       <div className='w-[70%] h-full'>
         <div ref={messageContainerRef} className='bg-[color:var(--light-secondary)] w-full h-[calc(100%-40px)] overflow-y-auto'>
           {messages.map(message => (
-            <MessageContent key={message.messageId} id={Number(session.user.id)} message={message} />
+            <MessageContent key={message.messageId} id={Number(user.id)} message={message} />
           ))}
         </div>
         {
           friendId === undefined
           ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-          : <SendMessage senderId={Number(session.user.id)} receiverId={friendId} />
+          : <SendMessage senderId={Number(user.id)} receiverId={friendId} />
         }
       </div>
     </div>
