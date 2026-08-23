@@ -4,13 +4,13 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {senderId: number, receiverId: number | undefined}) {
+export default function SendMessage(props: {senderId: string, receiverId: string | undefined}) {
   const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
-  const sendMessage = async (senderId: number, receiverId: number | undefined, content: string) => {
+  const sendMessage = async (senderId: string, receiverId: string | undefined, content: string) => {
     content = content.trim();
     if (!content) return;
 
