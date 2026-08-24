@@ -9,6 +9,11 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
   const [messages, setMessages] = useState<Message[]>([]);
   const [friendId, setFriendId] = useState<string>();
   const messageContainerRef = useRef<HTMLDivElement>(null);
+  const friendIdRef = useRef<string>(friendId);
+
+  useEffect(() => {
+    friendIdRef.current = friendId;
+  }, [friendId]);
 
   const getMessages = useCallback(async (friendId: string) => {
     setFriendId(friendId);
@@ -44,7 +49,7 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
           const receiverId = newMessage.receiver_id;
           const myId = user.id;
 
-          if (senderId === myId && receiverId === friendId || senderId === friendId && receiverId === myId) {
+          if (senderId === myId && receiverId === friendIdRef.current || senderId === friendIdRef.current && receiverId === myId) {
             const message: Message = {
               messageId: newMessage.message_id,
               senderId,
@@ -61,7 +66,7 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, friendId]);
+  }, [user]);
 
   return (
     <div className='flex w-full h-full md:border-[color:var(--color-primary)] md:border-x-4'>
