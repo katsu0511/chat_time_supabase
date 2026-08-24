@@ -1,11 +1,18 @@
-import { auth } from '@/lib/getSession';
+import type { User as AuthUser } from '@supabase/supabase-js';
+import getAuthUser from '@/lib/getAuthUser';
 import { redirect } from 'next/navigation';
+import { getUser, getFriendIds } from '@/lib/getter';
 import SearchUsers from '@/components/Organisms/SearchUsers';
-import { getFriendIds } from '@/lib/getter';
 
 export default async function Friend() {
-  const session = await auth();
-  if (!session) return redirect('/login');
-  const friendIds = await getFriendIds(Number(session.user.id));
-  return <SearchUsers session={session} friendIds={friendIds} />;
+  const authUser: AuthUser | null = await getAuthUser();
+  if (!authUser) {
+    redirect('/login');
+  }
+  const appUser: AppUser | null = await getUser(authUser.id);
+  if (!appUser) {
+    redirect('/login');
+  }
+  const friendIds = await getFriendIds(appUser.id);
+  return <SearchUsers user={appUser} friendIds={friendIds} />;
 }

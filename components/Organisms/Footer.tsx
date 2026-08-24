@@ -1,14 +1,10 @@
-'use client';
-
-import { useSession } from 'next-auth/react';
+import type { User as AuthUser } from '@supabase/supabase-js';
 import FooterLink from '@/components/Atoms/FooterLink';
 
-export default function Footer() {
-  const { data: session } = useSession();
-
+export default async function Footer({user}: {user: AuthUser | null}) {
   return (
     <footer className='bg-[color:var(--color-primary)] w-full h-10'>
-      {session
+      {user
         ? <div className='flex justify-center max-w-screen-xl w-full h-full px-4 mx-auto'>
             <FooterLink display='Chat' url='/'/>
             <FooterLink display='Friend' url='/friend'/>

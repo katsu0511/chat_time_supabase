@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 
 const useAuth = () => {
   const [name, setName] = useState('');
-  const [userid, setUserid] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
@@ -11,8 +11,8 @@ const useAuth = () => {
   return {
     name,
     setName,
-    userid,
-    setUserid,
+    email,
+    setEmail,
     password,
     setPassword,
     error,

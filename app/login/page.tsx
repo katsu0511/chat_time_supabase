@@ -1,9 +1,12 @@
-import { auth } from '@/lib/getSession';
+import type { User as AuthUser } from '@supabase/supabase-js';
+import getAuthUser from '@/lib/getAuthUser';
 import { redirect } from 'next/navigation';
 import LoginForm from '@/components/Organisms/LoginForm';
 
 export default async function Login() {
-  const session = await auth();
-  if (session) return redirect('/');
+  const user: AuthUser | null = await getAuthUser();
+  if (user) {
+    redirect('/');
+  }
   return <LoginForm />;
 }

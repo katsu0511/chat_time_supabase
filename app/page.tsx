@@ -1,14 +1,18 @@
-import { auth } from '@/lib/getSession';
+import type { User as AuthUser } from '@supabase/supabase-js';
+import getAuthUser from '@/lib/getAuthUser';
 import { redirect } from 'next/navigation';
-import { NextResponse } from 'next/server';
-import { getFriends } from '@/lib/getter';
+import { getUser, getFriends } from '@/lib/getter';
 import Messages from '@/components/Organisms/Messages';
 
 export default async function Home() {
-  const session = await auth();
-  if (!session) return redirect('/login');
-  const id = Number(session.user.id);
-  if (isNaN(id)) return NextResponse.json({ error: 'ID must be a number' }, { status: 400 });
-  const friends = await getFriends(id);
-  return <Messages session={session} friends={friends} />;
+  const authUser: AuthUser | null = await getAuthUser();
+  if (!authUser) {
+    redirect('/login');
+  }
+  const appUser: AppUser | null = await getUser(authUser.id);
+  if (!appUser) {
+    redirect('/login');
+  }
+  const friends: AppUser[] = await getFriends(appUser.id);
+  return <Messages user={appUser} friends={friends} />;
 }
