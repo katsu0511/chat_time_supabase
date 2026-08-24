@@ -1,10 +1,8 @@
-import getAuthUser from '@/lib/getAuthUser';
+import type { User as AuthUser } from '@supabase/supabase-js';
 import Link from 'next/link';
 import LogoutButton from '@/components/Atoms/LogoutButton';
 
-export default async function Header() {
-  const user = await getAuthUser();
-
+export default async function Header({user}: {user: AuthUser | null}) {
   return (
     <header className='bg-[color:var(--color-primary)] w-full h-10'>
       <div className='flex justify-between max-w-screen-xl w-full h-full px-4 mx-auto'>
