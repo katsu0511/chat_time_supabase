@@ -11,7 +11,7 @@ export async function createUser(data: {id: string, name: string, email: string}
         id: true,
         name: true,
         email: true
-      },
+      }
     });
   } catch (error) {
     if (error instanceof Error) {
