@@ -1,9 +1,7 @@
-import getAuthUser from '@/lib/getAuthUser';
+import type { User as AuthUser } from '@supabase/supabase-js';
 import FooterLink from '@/components/Atoms/FooterLink';
 
-export default async function Footer() {
-  const user = await getAuthUser();
-
+export default async function Footer({user}: {user: AuthUser | null}) {
   return (
     <footer className='bg-[color:var(--color-primary)] w-full h-10'>
       {user
