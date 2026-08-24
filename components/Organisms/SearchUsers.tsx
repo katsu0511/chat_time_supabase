@@ -1,15 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import type { Session, User } from 'next-auth';
 import { useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input } from '@mui/material';
 import UserList from '@/components/Molecules/UserList';
 
-export default function SearchUsers(props: {session: Session, friendIds: number[]}) {
-  const [users, setUsers] = useState<User[]>([]);
-  const [friendIds, setFriendIds] = useState<number[]>(props.friendIds);
+export default function SearchUsers(props: {user: AppUser, friendIds: string[]}) {
+  const [users, setUsers] = useState<AppUser[]>([]);
+  const [friendIds, setFriendIds] = useState<string[]>(props.friendIds);
 
   const context = useContext(ThemeContext);
   if (!context) return null;
@@ -21,13 +20,13 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
       setUsers([]);
       return;
     }
-    let users: User[] = [];
+    let users: AppUser[] = [];
     const res = await fetch(`/api/getUsersByName?name=${name}`);
     if (res.ok) users = await res.json();
     setUsers(users);
   };
 
-  const handleFriendAdded = (newFriendId: number) => {
+  const handleFriendAdded = (newFriendId: string) => {
     setFriendIds((prev) => [...prev, newFriendId]);
   };
 
@@ -59,7 +58,7 @@ export default function SearchUsers(props: {session: Session, friendIds: number[
       />
       <ul className='block text-center py-10'>
         {users.map(user => (
-            <UserList key={user.id} user={user} myId={props.session.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
+            <UserList key={user.id} user={user} myId={props.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
         ))}
       </ul>
     </div>
