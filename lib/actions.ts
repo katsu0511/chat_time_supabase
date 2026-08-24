@@ -31,8 +31,8 @@ export async function addFriend(userId: string, friendId: string) {
   const friendStatus = await prisma.friend.findFirst({
     where: {
       OR: [
-        { userId, friendId },
-        { friendId, userId }
+        { userId: userId, friendId: friendId },
+        { userId: friendId, friendId: userId }
       ]
     }
   });
@@ -41,8 +41,8 @@ export async function addFriend(userId: string, friendId: string) {
 
   const rows = await prisma.friend.createMany({
     data: [
-      { userId, friendId },
-      { friendId, userId }
+      { userId: userId, friendId: friendId },
+      { userId: friendId, friendId: userId }
     ],
     skipDuplicates: true
   });
