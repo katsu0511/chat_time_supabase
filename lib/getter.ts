@@ -8,7 +8,7 @@ export async function getUser(id: string) {
   });
 }
 
-export async function getUsers(name: string): Promise<User[]> {
+export async function getUsers(name: string): Promise<AppUser[]> {
   return await prisma.user.findMany({
     where: {
       OR: [
@@ -32,7 +32,7 @@ export async function getFriendIds(userId: string): Promise<string[]> {
   return friendIds.map((f) => f.friendId);
 }
 
-export async function getFriends(userId: string): Promise<User[]> {
+export async function getFriends(userId: string): Promise<AppUser[]> {
   const friends = await prisma.friend.findMany({
     where: {
       userId,
