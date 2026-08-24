@@ -32,6 +32,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
 
   return (
     <div className='w-full h-full py-20'>
+      <h2 className='text-2xl font-bold text-[color:var(--color-primary)] text-center pb-4'>Search Users</h2>
       <Input
         disableUnderline
         sx={{
@@ -58,7 +59,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
       />
       <ul className='block text-center py-10'>
         {users.map(user => (
-            <UserList key={user.id} user={user} myId={props.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
+          <UserList key={user.id} user={user} myId={props.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
         ))}
       </ul>
     </div>
