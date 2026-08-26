@@ -2,7 +2,7 @@ import '@/app/globals.css';
 import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { User as AuthUser } from '@supabase/supabase-js';
-import getAuthUser from '@/lib/getAuthUser';
+import getAuthUser from '@/lib/auth/getAuthUser';
 import { ThemeProviderWrapper } from '@/components/Templates/ThemeProviderWrapper';
 import Header from '@/components/Organisms/Header';
 import Main from '@/components/Templates/Main';

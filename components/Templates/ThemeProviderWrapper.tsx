@@ -1,6 +1,6 @@
 'use client';
 
-import { ThemeColor, ColorGroup } from '@/lib/themeColor';
+import { ThemeColor, ColorGroup } from '@/lib/theme/colors';
 import { createContext, useState, useEffect, useMemo } from 'react';
 import { PaletteMode, Theme, createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';

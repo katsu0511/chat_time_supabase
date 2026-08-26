@@ -1,7 +1,7 @@
 'use client';
 
-import useAuth from '@/lib/useAuth';
-import { handleSignup } from '@/lib/auth';
+import useAuth from '@/lib/hooks/useAuth';
+import { handleSignup } from '@/lib/api/auth';
 import Input from '@/components/Molecules/Input';
 import Button from '@/components/Molecules/Button';
 import PageLink from '@/components/Atoms/PageLink';

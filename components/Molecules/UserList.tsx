@@ -1,4 +1,4 @@
-import { addFriend } from '@/lib/actions';
+import { addFriend } from '@/lib/api/actions';
 import { Button } from '@mui/material';
 
 export default function UserList(props: {user: AppUser, myId: string, friendIds: string[], onFriendAdded: (id: string) => void}) {

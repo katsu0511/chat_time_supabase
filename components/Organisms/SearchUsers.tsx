@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input } from '@mui/material';
 import UserList from '@/components/Molecules/UserList';
