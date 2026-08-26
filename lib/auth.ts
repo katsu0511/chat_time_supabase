@@ -26,9 +26,15 @@ export const handleSignup = async (
   name: string,
   email: string,
   password: string,
+  passwordConfirm: string,
   router: AppRouterInstance,
   setError: (error: string) => void
 ) => {
+  if (password !== passwordConfirm) {
+    setError('Password doesn\'t match');
+    return;
+  }
+
   const { data, error } = await supabase.auth.signUp({ email, password });
 
   if (error || !data.user) {
