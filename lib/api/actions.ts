@@ -1,7 +1,7 @@
 'use server';
 
 import { Prisma } from '@/lib/generated/prisma/client';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/infrastructure/prisma';
 
 export async function createUser(data: {id: string, name: string, email: string}) {
   try {
