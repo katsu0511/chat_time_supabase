@@ -1,6 +1,6 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { supabase } from '@/lib/supabaseBrowser';
-import { createUser } from '@/lib/actions';
+import { supabase } from '@/lib/infrastructure/supabaseBrowser';
+import { createUser } from '@/lib/api/actions';
 
 export const handleLogin = async (
   email: string,
