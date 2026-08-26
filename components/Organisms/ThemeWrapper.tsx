@@ -1,6 +1,6 @@
 'use client';
 
-import { ThemeColor } from '@/lib/themeColor';
+import { ThemeColor } from '@/lib/theme/colors';
 import { PaletteMode, FormLabel, RadioGroup } from '@mui/material';
 import { useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';

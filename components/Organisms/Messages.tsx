@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseBrowser';
+import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import FriendList from '@/components/Organisms/FriendList';
 import MessageContent from '@/components/Molecules/MessageContent';
 import SendMessage from '@/components/Molecules/SendMessage';

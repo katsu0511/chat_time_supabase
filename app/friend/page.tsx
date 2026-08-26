@@ -1,7 +1,7 @@
 import type { User as AuthUser } from '@supabase/supabase-js';
-import getAuthUser from '@/lib/getAuthUser';
+import getAuthUser from '@/lib/auth/getAuthUser';
 import { redirect } from 'next/navigation';
-import { getUser, getFriendIds } from '@/lib/getter';
+import { getUser, getFriendIds } from '@/lib/api/getter';
 import SearchUsers from '@/components/Organisms/SearchUsers';
 
 export default async function Friend() {

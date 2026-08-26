@@ -1,4 +1,4 @@
-import { getUsers } from '@/lib/getter';
+import { getUsers } from '@/lib/api/getter';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {

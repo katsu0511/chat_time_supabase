@@ -1,7 +1,7 @@
 import type { User as AuthUser } from '@supabase/supabase-js';
-import getAuthUser from '@/lib/getAuthUser';
+import getAuthUser from '@/lib/auth/getAuthUser';
 import { redirect } from 'next/navigation';
-import { getUser, getFriends } from '@/lib/getter';
+import { getUser, getFriends } from '@/lib/api/getter';
 import Messages from '@/components/Organisms/Messages';
 
 export default async function Home() {

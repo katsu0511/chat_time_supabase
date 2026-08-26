@@ -1,4 +1,4 @@
-import { getMessages } from '@/lib/getter';
+import { getMessages } from '@/lib/api/getter';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {

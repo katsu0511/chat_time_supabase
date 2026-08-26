@@ -1,7 +1,7 @@
 'use client';
 
-import { supabase } from '@/lib/supabaseBrowser';
-import useAuth from '@/lib/useAuth';
+import { supabase } from '@/lib/infrastructure/supabaseBrowser';
+import useAuth from '@/lib/hooks/useAuth';
 
 export default function LogoutButton() {
   const { router } = useAuth();

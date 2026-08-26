@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import ThemeWrapper from '@/components/Organisms/ThemeWrapper';
-import { ThemeColor } from '@/lib/themeColor';
+import { ThemeColor } from '@/lib/theme/colors';
 import RadioButton from '@/components/Atoms/RadioButton';
 
 export default function ThemeColorWrapper() {
