@@ -1,18 +1,12 @@
 'use server';
 
-import { Prisma } from '@/lib/generated/prisma/client';
+import { Language } from '@/lib/domain/languages';
 import prisma from '@/lib/infrastructure/prisma';
+import { Prisma } from '@/lib/generated/prisma/client';
 
-export async function createUser(data: {id: string, name: string, email: string}) {
+export async function createUser(data: {id: string, name: string, email: string, language: Language}) {
   try {
-    return await prisma.user.create({
-      data,
-      select: {
-        id: true,
-        name: true,
-        email: true
-      }
-    });
+    return await prisma.user.create({ data });
   } catch (error) {
     if (error instanceof Error) {
       if (error.constructor.name === 'PrismaClientKnownRequestError' && (error as Prisma.PrismaClientKnownRequestError).code === 'P2002') {
@@ -49,12 +43,12 @@ export async function addFriend(userId: string, friendId: string) {
   return rows.count;
 }
 
-export async function sendMessage(senderId: string, receiverId: string, content: string) {
-  return await prisma.message.create({
-    data: {
-      senderId,
-      receiverId,
-      content
-    }
+export async function sendMessage(senderId: string, receiverId: string, originalContent: string, translatedContent: string) {
+  const rows = await prisma.message.createMany({
+    data: [
+      { senderId, receiverId, content: originalContent, isTranslated: false },
+      { senderId, receiverId, content: translatedContent, isTranslated: true }
+    ]
   });
+  return rows.count;
 }
