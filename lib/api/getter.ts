@@ -54,8 +54,8 @@ export async function getMessages(userId: string, friendId: string) {
   return await prisma.message.findMany({
     where: {
       OR: [
-        { senderId: userId, receiverId: friendId },
-        { senderId: friendId, receiverId: userId }
+        { senderId: userId, receiverId: friendId, isTranslated: false },
+        { senderId: friendId, receiverId: userId, isTranslated: true }
       ]
     },
     orderBy: {
