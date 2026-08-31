@@ -3,8 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import FriendList from '@/components/Organisms/FriendList';
-import MessageContent from '@/components/Molecules/MessageContent';
-import SendMessage from '@/components/Molecules/SendMessage';
+import ChatScreen from '@/components/Organisms/ChatScreen';
 
 export default function Messages({user, friends}: {user: AppUser, friends: AppUser[]}) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -77,18 +76,7 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
   return (
     <div className='flex w-full h-full md:border-[color:var(--color-primary)] md:border-x-4'>
       <FriendList friends={friends} currentFriendId={friendId} getMessages={getMessages} />
-      <div className='w-[70%] h-full'>
-        <div ref={messageContainerRef} className='bg-[color:var(--light-secondary)] w-full h-[calc(100%-40px)] overflow-y-auto'>
-          {messages.map(message => (
-            <MessageContent key={message.messageId} userId={user.id} message={message} />
-          ))}
-        </div>
-        {
-          friendId === undefined
-          ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-          : <SendMessage receiverId={friendId} />
-        }
-      </div>
+      <ChatScreen user={user} friendId={friendId} messages={messages} />
     </div>
   );
 }
