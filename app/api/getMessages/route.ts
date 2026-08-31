@@ -5,7 +5,7 @@ import { getMessages } from '@/lib/api/getter';
 
 export async function GET(req: Request) {
   const user: AuthUser | null = await getAuthUser();
-   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { searchParams } = new URL(req.url);
   const friendId = searchParams.get('friendId');
   if (!friendId) return NextResponse.json({ error: 'Friend ID is required' }, { status: 400 });
