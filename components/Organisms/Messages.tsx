@@ -18,14 +18,14 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
 
   const getMessages = useCallback(async (friendId: string) => {
     setFriendId(friendId);
-    const res = await fetch(`/api/getMessages?userId=${user.id}&friendId=${friendId}`);
+    const res = await fetch(`/api/getMessages?friendId=${friendId}`);
     if (!res.ok) {
       setMessages([]);
       return;
     }
     const contents: Message[] = await res.json();
     setMessages(contents);
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     messageContainerRef.current?.scrollTo({
@@ -49,13 +49,18 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
           const senderId = newMessage.sender_id;
           const receiverId = newMessage.receiver_id;
           const myId = user.id;
+          const isTranslated: boolean = newMessage.is_translated;
 
-          if (senderId === myId && receiverId === friendIdRef.current || senderId === friendIdRef.current && receiverId === myId) {
+          if (
+            senderId === myId && receiverId === friendIdRef.current && !isTranslated ||
+            senderId === friendIdRef.current && receiverId === myId && isTranslated
+          ) {
             const message: Message = {
               messageId: newMessage.message_id,
               senderId,
               receiverId,
               content: newMessage.content,
+              isTranslated,
               createdAt: newMessage.created_at,
             };
             setMessages(prev => [...prev, message]);
@@ -81,7 +86,7 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
         {
           friendId === undefined
           ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-          : <SendMessage senderId={user.id} receiverId={friendId} />
+          : <SendMessage receiverId={friendId} />
         }
       </div>
     </div>
