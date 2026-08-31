@@ -1,12 +1,14 @@
-import { getMessages } from '@/lib/api/getter';
+import type { User as AuthUser } from '@supabase/supabase-js';
+import getAuthUser from '@/lib/auth/getAuthUser';
 import { NextResponse } from 'next/server';
+import { getMessages } from '@/lib/api/getter';
 
 export async function GET(req: Request) {
+  const user: AuthUser | null = await getAuthUser();
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('userId');
   const friendId = searchParams.get('friendId');
-  if (!userId) return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
   if (!friendId) return NextResponse.json({ error: 'Friend ID is required' }, { status: 400 });
-  const messages = await getMessages(userId, friendId);
+  const messages = await getMessages(user.id, friendId);
   return NextResponse.json(messages);
 }

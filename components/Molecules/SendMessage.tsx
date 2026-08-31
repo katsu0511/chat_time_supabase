@@ -4,13 +4,13 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {senderId: string, receiverId: string | undefined}) {
+export default function SendMessage(props: {receiverId: string | undefined}) {
   const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
-  const sendMessage = async (senderId: string, receiverId: string | undefined, content: string) => {
+  const sendMessage = async (receiverId: string | undefined, content: string) => {
     content = content.trim();
     if (!content) return;
 
@@ -19,7 +19,7 @@ export default function SendMessage(props: {senderId: string, receiverId: string
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ senderId, receiverId, content }),
+      body: JSON.stringify({ receiverId, content }),
     });
 
     if (!res.ok) return null;
@@ -56,7 +56,7 @@ export default function SendMessage(props: {senderId: string, receiverId: string
         color='secondary'
         disableElevation={true}
         disabled={ props.receiverId == undefined || message.trim() == '' }
-        onClick={() => sendMessage(props.senderId, props.receiverId, message)}
+        onClick={() => sendMessage(props.receiverId, message)}
         sx={{
           display: 'block',
           color: 'white',

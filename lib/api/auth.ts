@@ -1,5 +1,6 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
+import { Language } from '@/lib/domain/languages';
 import { createUser } from '@/lib/api/actions';
 
 export const handleLogin = async (
@@ -25,6 +26,7 @@ export const handleLogin = async (
 export const handleSignup = async (
   name: string,
   email: string,
+  language: Language,
   password: string,
   passwordConfirm: string,
   router: AppRouterInstance,
@@ -47,6 +49,7 @@ export const handleSignup = async (
     id: data.user.id,
     name,
     email,
+    language
   });
 
   if (typeof user === 'string') {

@@ -44,6 +44,7 @@ model Message {
   senderId          String      @map("sender_id") @db.Uuid
   receiverId        String      @map("receiver_id") @db.Uuid
   content           String
+  isTranslated      Boolean     @map("is_translated")
   createdAt         DateTime    @map("created_at")  @default(now())
 
   sender            User        @relation("SenderUser", fields: [senderId], references: [id])
