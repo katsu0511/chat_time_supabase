@@ -41,7 +41,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
           maxWidth: '400px',
           height: '50px',
           padding: '0 20px',
-          margin: '16px auto 0'
+          margin: '0 auto'
         }}
         inputProps={{
           sx: {
