@@ -1,28 +1,19 @@
 import type { User as AuthUser } from '@supabase/supabase-js';
 import getAuthUser from '@/lib/auth/getAuthUser';
 import { redirect } from 'next/navigation';
-import { FormControl } from '@mui/material';
-import ThemeModeWrapper from '@/components/Organisms/ThemeModeWrapper';
-import ThemeColorWrapper from '@/components/Organisms/ThemeColorWrapper';
+import Heading from '@/components/Atoms/Heading';
+import PageLink from '@/components/Atoms/PageLink';
 
 export default async function Setting() {
   const user: AuthUser | null = await getAuthUser();
   if (!user) return redirect('/login');
 
   return (
-    <div className='w-full h-full'>
-      <FormControl
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%'
-        }}
-      >
-        <ThemeModeWrapper />
-        <ThemeColorWrapper />
-      </FormControl>
+    <div className='flex items-center w-full h-full'>
+      <div className='w-full'>
+        <Heading title='Setting' />
+        <PageLink path='setting/theme' display='Theme Setting' />
+      </div>
     </div>
   );
 }
