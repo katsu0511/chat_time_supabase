@@ -2,6 +2,7 @@
 
 import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
+import Heading from '@/components/Atoms/Heading';
 import { Input } from '@mui/material';
 import UserList from '@/components/Molecules/UserList';
 
@@ -31,7 +32,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
 
   return (
     <div className='w-full h-full py-20'>
-      <h2 className='text-2xl font-bold text-[color:var(--color-primary)] text-center pb-4'>Search Users</h2>
+      <Heading title='Search Users' />
       <Input
         disableUnderline
         sx={{
@@ -40,7 +41,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
           maxWidth: '400px',
           height: '50px',
           padding: '0 20px',
-          margin: '0 auto'
+          margin: '16px auto 0'
         }}
         inputProps={{
           sx: {
