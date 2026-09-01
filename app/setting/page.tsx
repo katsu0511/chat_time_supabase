@@ -13,6 +13,7 @@ export default async function Setting() {
       <div className='w-full'>
         <Heading title='Setting' />
         <PageLink path='setting/theme' display='Theme Setting' />
+        <PageLink path='setting/account' display='Account Setting' />
       </div>
     </div>
   );
