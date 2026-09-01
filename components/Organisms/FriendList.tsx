@@ -7,7 +7,7 @@ export default function FriendList({ friends, currentFriendId, getMessages }: { 
     <div className={`${displayFriendList} w-full h-full md:block md:w-[30%]`}>
       <ul>
         {friends.map(friend => (
-          <li key={friend.id} className='w-full h-24'>
+          <li key={friend.id} className='w-full h-24 border-[color:var(--color-secondary)] border-b-1'>
             <button
               className={`w-full h-full p-2 cursor-pointer duration-300 ${currentFriendId === friend.id && 'bg-[color:var(--color-secondary)] shadow-xl'} hover:bg-[color:var(--color-secondary)] hover:shadow-xl`}
               onClick={() => getMessages(friend.id, friend.name)}
