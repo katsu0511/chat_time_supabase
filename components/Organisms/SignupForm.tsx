@@ -25,7 +25,7 @@ export default function SignupForm() {
         <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         <Input label='Password Confirm' type='password' value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}/>
         <Button usage='Signup' error={error} />
-        <PageLink usage='login' />
+        <PageLink path='login' display='Login' />
       </form>
     </div>
   );
