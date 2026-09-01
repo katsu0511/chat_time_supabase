@@ -20,7 +20,7 @@ export default function LoginForm() {
         <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         <Button usage='Login' error={error} />
-        <PageLink usage='signup' />
+        <PageLink path='signup' display='Signup' />
       </form>
     </div>
   );
