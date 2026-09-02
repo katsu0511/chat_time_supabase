@@ -23,7 +23,7 @@ export default function SignupForm() {
         <Heading title='Signup' />
         <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
         <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
-        <LanguageSelect label='Language' onChange={(e) => setLanguage(e.target.value as Language)} />
+        <LanguageSelect label='Language' value={language} onChange={(e) => setLanguage(e.target.value as Language)} />
         <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         <Input label='Password Confirm' type='password' value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}/>
         <Button usage='Signup' error={error} />
