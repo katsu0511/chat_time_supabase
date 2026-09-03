@@ -5,7 +5,7 @@ export default function FriendList({ friends, currentFriendId, getMessages }: { 
 
   return (
     <div className={`${displayFriendList} w-full h-full md:block md:w-[30%]`}>
-      <ul>
+      <ul className='w-full h-[calc(100dvh-80px)] overflow-x-hidden overflow-y-scroll'>
         {friends.map(friend => (
           <li key={friend.id} className='w-full h-24 border-[color:var(--color-secondary)] border-b-1'>
             <button
