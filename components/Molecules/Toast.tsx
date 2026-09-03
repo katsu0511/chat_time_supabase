@@ -22,8 +22,8 @@ export default function Toast({ dialogOpen, setDialogOpen, snackbarOpen, setSnac
           <br />After this operation, you will be logged out automatically.
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCancel()}>Cancel</Button>
-          <Button color='error' onClick={() => changeEmail()}>Change</Button>
+          <Button color='error' onClick={() => handleCancel()}>Cancel</Button>
+          <Button color='success' onClick={() => changeEmail()}>Change</Button>
         </DialogActions>
       </Dialog>
       <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={() => setSnackbarOpen(false)}>
