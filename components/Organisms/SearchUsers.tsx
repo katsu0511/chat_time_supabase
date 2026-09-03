@@ -57,7 +57,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
         }}
         onChange={(e) => searchUsers(e.target.value)}
       />
-      <ul className='block text-center py-10'>
+      <ul className='block h-[calc(100dvh-302px)] text-center mt-5 overflow-y-scroll'>
         {users.map(user => (
           <UserList key={user.id} user={user} myId={props.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
         ))}
