@@ -19,7 +19,6 @@ export default function Toast({ type, dialogOpen, setDialogOpen, snackbarOpen, s
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Change your {type}</DialogTitle>
         <DialogContent>Are you sure to change your {type}?
-          <br /><strong>This operation cannot be reverted.</strong>
           <br />After this operation, you will be logged out automatically.
         </DialogContent>
         <DialogActions>
