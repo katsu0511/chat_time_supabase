@@ -31,7 +31,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
   };
 
   return (
-    <div className='w-full h-full py-20'>
+    <div className='w-full h-full'>
       <Heading title='Search Users' />
       <Input
         disableUnderline
