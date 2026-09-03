@@ -62,3 +62,10 @@ export async function changeAccountSetting(id: string, name: string, language: s
     },
   });
 }
+
+export async function changeEmail(id: string, email: string) {
+  return await prisma.user.update({
+    where: { id },
+    data: { email },
+  });
+}
