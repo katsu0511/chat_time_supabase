@@ -65,6 +65,8 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
         <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
         <Button usage='Change' error={error} />
         <PageLink path='' display='Account Setting' />
+        <PageLink path='password' display='Password Setting' />
+        <PageLink path='..' display='Setting' />
       </form>
       <Toast type='email' dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeAuthInfo={changeEmail} />
     </div>
