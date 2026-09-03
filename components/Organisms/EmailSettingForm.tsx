@@ -34,7 +34,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email: pendingData }),
     });
 
     if (res.ok) {
