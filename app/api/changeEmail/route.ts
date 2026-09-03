@@ -1,7 +1,7 @@
 import type { User as AuthUser } from '@supabase/supabase-js';
 import getAuthUser from '@/lib/auth/getAuthUser';
-import supabaseAdmin from '@/lib/infrastructure/supabaseAdmin';
 import { NextResponse } from 'next/server';
+import supabaseAdmin from '@/lib/infrastructure/supabaseAdmin';
 import { changeEmail } from '@/lib/api/actions';
 
 export async function POST(req: Request) {
