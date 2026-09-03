@@ -7,7 +7,7 @@ import Input from '@/components/Molecules/Input';
 import Button from '@/components/Molecules/Button';
 import { handleLogout } from '@/lib/api/auth';
 import PageLink from '@/components/Atoms/PageLink';
-import Toast from '../Molecules/Toast';
+import Toast from '@/components/Molecules/Toast';
 
 export default function EmailSettingForm({ user }: { user: AppUser }) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -66,7 +66,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
         <Button usage='Change' error={error} />
         <PageLink path='' display='Account Setting' />
       </form>
-      <Toast dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeEmail={changeEmail} />
+      <Toast type='email' dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeAuthInfo={changeEmail} />
     </div>
   );
 }
