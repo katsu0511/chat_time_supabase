@@ -13,7 +13,7 @@ export default function ChatScreen(
   }) {
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const displayChatScreen = friendId === undefined ? 'hidden' : 'block';
-  const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)]';
+  const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)] min-h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)] min-h-[calc(100dvh-120px)]';
 
   useEffect(() => {
     messageContainerRef.current?.scrollTo({
