@@ -17,6 +17,8 @@ export default function SignupForm() {
   const signup = async(e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+
     if (password !== passwordConfirm) {
       setError('Password doesn\'t match');
       setLoading(false);
