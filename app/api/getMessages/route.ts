@@ -9,6 +9,10 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const friendId = searchParams.get('friendId');
   if (!friendId) return NextResponse.json({ error: 'Friend ID is required' }, { status: 400 });
-  const messages = await getMessages(user.id, friendId);
-  return NextResponse.json(messages);
+  try {
+    const messages = await getMessages(user.id, friendId);
+    return NextResponse.json(messages);
+  } catch {
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
+  }
 }
