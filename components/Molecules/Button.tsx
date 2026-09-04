@@ -6,7 +6,7 @@ export default function Button({ usage, error, disabled }: { usage: string, erro
   return (
     <div className='py-2'>
       {error && <p className='text-red-500 font-bold text-center mb-4'>{error}</p>}
-      <input type='submit' value={usage} disabled={disabled} className={`block border-2 rounded-md h-10 w-20 mx-auto my-0 duration-300 ${buttonClassName}`} />
+      <input type='submit' value={disabled ? 'Loading..' : usage} disabled={disabled} className={`block border-2 rounded-md h-10 w-20 mx-auto my-0 duration-300 ${buttonClassName}`} />
     </div>
   );
 }
