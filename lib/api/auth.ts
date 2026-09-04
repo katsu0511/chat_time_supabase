@@ -2,6 +2,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import { Language } from '@/lib/domain/languages';
 import { createUser } from '@/lib/api/actions';
+import { Prisma } from '@/lib/generated/prisma/client';
 
 export const handleLogin = async (
   email: string,
@@ -28,33 +29,24 @@ export const handleSignup = async (
   email: string,
   language: Language,
   password: string,
-  passwordConfirm: string,
-  router: AppRouterInstance,
-  setError: (error: string) => void
+  router: AppRouterInstance
 ) => {
-  if (password !== passwordConfirm) {
-    setError('Password doesn\'t match');
-    return;
-  }
-
   const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error || !data.user) return { message: error?.message ?? 'Failed to signup' };
 
-  if (error || !data.user) {
-    console.error('Signup error:', error);
-    setError(error?.message ?? 'Failed to signup');
-    return;
-  }
-
-  const user = await createUser({
-    id: data.user.id,
-    name,
-    email,
-    language
-  });
-
-  if (typeof user === 'string') {
-    setError(user);
-    return;
+  try {
+    await createUser({ id: data.user.id, name, email, language });
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.constructor.name === 'PrismaClientKnownRequestError' && (error as Prisma.PrismaClientKnownRequestError).code === 'P2002') {
+        console.error('This user ID is already used: ', error.message);
+        return { message: 'This user ID is already used.'};
+      }
+      console.error('General error: ', error);
+      return { message: 'General error' };
+    }
+    console.error('Unknown error: ', error);
+    return { message: 'Unknown error' };
   }
 
   router.push('/');
