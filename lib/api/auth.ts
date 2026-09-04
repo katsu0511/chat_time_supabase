@@ -6,20 +6,10 @@ import { createUser } from '@/lib/api/actions';
 export const handleLogin = async (
   email: string,
   password: string,
-  router: AppRouterInstance,
-  setError: (error: string) => void
+  router: AppRouterInstance
 ) => {
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    console.error('Login error:', error.message);
-    setError('Failed to login');
-    return;
-  }
-
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { message: 'Failed to login' };
   router.push('/');
 };
 
