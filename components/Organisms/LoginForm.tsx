@@ -15,6 +15,8 @@ export default function LoginForm() {
   const login = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+
     const error = await handleLogin(email, password, router);
     if (error) {
       setError(error.message);
