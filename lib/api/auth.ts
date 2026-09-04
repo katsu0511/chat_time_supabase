@@ -69,3 +69,12 @@ export const handleSignup = async (
 
   router.push('/');
 };
+
+export const checkPassword = async (email: string, password: string) => {
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  return error;
+};
