@@ -18,7 +18,7 @@ export default function ThemeWrapper(
   const { theme } = context;
 
   return (
-    <div className='flex flex-wrap justify-center items-center w-full h-auto my-10'>
+    <div className={`flex flex-wrap justify-center items-center w-full h-auto ${props.label === 'Theme' && 'mb-10'}`}>
       <FormLabel
         component='legend'
         sx={{

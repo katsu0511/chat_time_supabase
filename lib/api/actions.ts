@@ -52,3 +52,20 @@ export async function sendMessage(senderId: string, receiverId: string, original
   });
   return rows.count;
 }
+
+export async function changeAccountSetting(id: string, name: string, language: string) {
+  return await prisma.user.update({
+    where: { id },
+    data: {
+      name,
+      language,
+    },
+  });
+}
+
+export async function changeEmail(id: string, email: string) {
+  return await prisma.user.update({
+    where: { id },
+    data: { email },
+  });
+}

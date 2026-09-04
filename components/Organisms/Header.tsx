@@ -4,7 +4,7 @@ import LogoutButton from '@/components/Atoms/LogoutButton';
 
 export default async function Header({user}: {user: AuthUser | null}) {
   return (
-    <header className='bg-[color:var(--color-primary)] w-full h-10'>
+    <header className='fixed bg-[color:var(--color-primary)] w-full h-10 z-10'>
       <div className='flex justify-between max-w-screen-xl w-full h-full px-4 mx-auto'>
         {user
           ? <Link href='/' className='text-white text-3xl font-bold leading-10 duration-300 hover:opacity-60'>Chat Time</Link>

@@ -3,21 +3,17 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import FriendList from '@/components/Organisms/FriendList';
-import MessageContent from '@/components/Molecules/MessageContent';
-import SendMessage from '@/components/Molecules/SendMessage';
+import ChatScreen from '@/components/Organisms/ChatScreen';
 
 export default function Messages({user, friends}: {user: AppUser, friends: AppUser[]}) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [friendId, setFriendId] = useState<string>();
-  const messageContainerRef = useRef<HTMLDivElement>(null);
+  const [friendId, setFriendId] = useState<string | undefined>();
+  const [friendName, setFriendName] = useState<string | undefined>();
   const friendIdRef = useRef<string>(friendId);
 
-  useEffect(() => {
-    friendIdRef.current = friendId;
-  }, [friendId]);
-
-  const getMessages = useCallback(async (friendId: string) => {
+  const getMessages = useCallback(async (friendId: string, friendName: string) => {
     setFriendId(friendId);
+    setFriendName(friendName);
     const res = await fetch(`/api/getMessages?friendId=${friendId}`);
     if (!res.ok) {
       setMessages([]);
@@ -27,12 +23,15 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
     setMessages(contents);
   }, []);
 
+  const backToFriendList = () => {
+    setMessages([]);
+    setFriendId(undefined);
+    setFriendName(undefined);
+  };
+
   useEffect(() => {
-    messageContainerRef.current?.scrollTo({
-      top: messageContainerRef.current.scrollHeight,
-      behavior: 'auto'
-    });
-  }, [messages]);
+    friendIdRef.current = friendId;
+  }, [friendId]);
 
   useEffect(() => {
     const channel = supabase
@@ -75,20 +74,9 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
   }, [user]);
 
   return (
-    <div className='flex w-full h-full md:border-[color:var(--color-primary)] md:border-x-4'>
+    <div className='block w-full h-full md:flex md:border-[color:var(--color-primary)] md:border-x-4'>
       <FriendList friends={friends} currentFriendId={friendId} getMessages={getMessages} />
-      <div className='w-[70%] h-full'>
-        <div ref={messageContainerRef} className='bg-[color:var(--light-secondary)] w-full h-[calc(100%-40px)] overflow-y-auto'>
-          {messages.map(message => (
-            <MessageContent key={message.messageId} userId={user.id} message={message} />
-          ))}
-        </div>
-        {
-          friendId === undefined
-          ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-          : <SendMessage receiverId={friendId} />
-        }
-      </div>
+      <ChatScreen user={user} friendId={friendId} friendName={friendName} messages={messages} onBackToFriendList={backToFriendList} />
     </div>
   );
 }
