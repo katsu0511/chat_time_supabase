@@ -24,7 +24,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
 
     const error = await checkPassword(user.email, currentPassword);
     if (error) {
-      setError('Current password is wrong');
+      setError(error.message);
       setLoading(false);
       return;
     }
@@ -47,6 +47,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
 
   const changePassword = async () => {
     setDialogOpen(false);
+
     if (!pendingData) {
       setError('Something went wrong');
       setLoading(false);
