@@ -33,6 +33,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
 
   const changeEmail = async () => {
     setDialogOpen(false);
+    
     if (!pendingData) {
       setError('Something went wrong');
       setLoading(false);
