@@ -7,8 +7,10 @@ import Heading from '@/components/Atoms/Heading';
 import Input from '@/components/Molecules/Input';
 import Button from '@/components/Molecules/Button';
 import PageLink from '@/components/Atoms/PageLink';
+import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function LoginForm() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { email, setEmail, password, setPassword, error, setError, router } = useAuth();
 
@@ -17,12 +19,16 @@ export default function LoginForm() {
     setLoading(true);
     setError('');
 
-    const error = await handleLogin(email, password, router);
+    const error = await handleLogin(email, password);
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
     }
+
+    setSnackbarOpen(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    router.push('/');
   };
 
   return (
@@ -34,6 +40,7 @@ export default function LoginForm() {
         <Button usage='Login' error={error} disabled={loading} />
         <PageLink path='signup' display='Signup' disabled={loading} />
       </form>
+      <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully logged in' />
     </div>
   );
 }
