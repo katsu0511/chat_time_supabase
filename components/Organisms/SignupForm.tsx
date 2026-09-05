@@ -9,8 +9,10 @@ import LanguageSelect from '@/components/Molecules/LanguageSelect';
 import { Language } from '@/lib/domain/languages';
 import Button from '@/components/Molecules/Button';
 import PageLink from '@/components/Atoms/PageLink';
+import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function SignupForm() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { name, setName, email, setEmail, language, setLanguage, password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
@@ -25,12 +27,16 @@ export default function SignupForm() {
       return;
     }
 
-    const error = await handleSignup(name, email, language, passwordConfirm, router);
+    const error = await handleSignup(name, email, language, passwordConfirm);
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
     }
+
+    setSnackbarOpen(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    router.push('/');
   };
 
   return (
@@ -45,6 +51,7 @@ export default function SignupForm() {
         <Button usage='Signup' error={error} disabled={loading} />
         <PageLink path='login' display='Login' disabled={loading} />
       </form>
+      <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully signed up' />
     </div>
   );
 }
