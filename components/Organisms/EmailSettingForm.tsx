@@ -33,7 +33,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
 
   const changeEmail = async () => {
     setDialogOpen(false);
-    
+
     if (!pendingData) {
       setError('Something went wrong');
       setLoading(false);
@@ -51,7 +51,11 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     if (res.ok) {
       setSnackbarOpen(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await handleLogout(router);
+      const error = await handleLogout(router);
+      if (error) {
+        alert(error.message);
+        setLoading(false);
+      }
     } else {
       const data = await res.json();
       setError(data.error);
