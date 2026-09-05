@@ -8,8 +8,10 @@ import LanguageSelect from '@/components/Molecules/LanguageSelect';
 import { Language } from '@/lib/domain/languages';
 import Button from '@/components/Molecules/Button';
 import PageLink from '@/components/Atoms/PageLink';
+import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function AccountSettingForm({ user }: { user: AppUser }) {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { name, setName, language, setLanguage, error, setError, router } = useAuth();
 
@@ -32,14 +34,15 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
       body: JSON.stringify({ name, language }),
     });
 
-    if (!res.ok) {
+    if (res.ok) {
+      setSnackbarOpen(true);
+    } else {
       const data = await res.json();
       setError(data.error);
-      setLoading(false);
-      return;
     }
 
-    router.push('/setting');
+    setLoading(false);
+    router.refresh();
   };
 
   useEffect(() => {
@@ -58,6 +61,7 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
         <PageLink path='account/password' display='Password Setting' disabled={loading} />
         <PageLink path='' display='Setting' disabled={loading} />
       </form>
+      <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully changed your account settings' />
     </div>
   );
 }
