@@ -65,7 +65,11 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
     if (res.ok) {
       setSnackbarOpen(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await handleLogout(router);
+      const error = await handleLogout(router);
+      if (error) {
+        alert(error.message);
+        setLoading(false);
+      }
     } else {
       const data = await res.json();
       setError(data.error);
