@@ -29,6 +29,7 @@ export default function LoginForm() {
     setSnackbarOpen(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
     router.push('/');
+    router.refresh();
   };
 
   return (
