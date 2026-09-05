@@ -15,13 +15,7 @@ export const handleLogout = async (router: AppRouterInstance) => {
   router.push('/login');
 };
 
-export const handleSignup = async (
-  name: string,
-  email: string,
-  language: Language,
-  password: string,
-  router: AppRouterInstance
-) => {
+export const handleSignup = async (name: string, email: string, language: Language, password: string) => {
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error || !data.user) return { message: error?.message ?? 'Failed to signup' };
 
@@ -39,8 +33,6 @@ export const handleSignup = async (
     console.error('Unknown error: ', error);
     return { message: 'Unknown error' };
   }
-
-  router.push('/');
 };
 
 export const checkPassword = async (email: string, password: string) => {
