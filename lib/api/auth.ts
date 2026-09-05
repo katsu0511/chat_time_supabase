@@ -10,14 +10,10 @@ export const handleLogin = async (email: string, password: string, router: AppRo
   router.push('/');
 };
 
-export const handleLogout = async (router: AppRouterInstance,) => {
+export const handleLogout = async (router: AppRouterInstance) => {
   const { error } = await supabase.auth.signOut();
-  if (error) {
-    console.error('Logout error:', error.message);
-    return;
-  }
+  if (error) return { message: 'Failed to logout' };
   router.push('/login');
-  router.refresh();
 };
 
 export const handleSignup = async (
