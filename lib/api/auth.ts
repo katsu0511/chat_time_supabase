@@ -4,11 +4,7 @@ import { Language } from '@/lib/domain/languages';
 import { createUser } from '@/lib/api/actions';
 import { Prisma } from '@/lib/generated/prisma/client';
 
-export const handleLogin = async (
-  email: string,
-  password: string,
-  router: AppRouterInstance
-) => {
+export const handleLogin = async (email: string, password: string, router: AppRouterInstance) => {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { message: 'Failed to login' };
   router.push('/');
