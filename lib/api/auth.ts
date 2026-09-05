@@ -37,5 +37,5 @@ export const handleSignup = async (name: string, email: string, language: Langua
 
 export const checkPassword = async (email: string, password: string) => {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  return error ? { message: 'Current password is wrong'} : null;
+  if (error) return { message: 'Current password is wrong'};
 };
