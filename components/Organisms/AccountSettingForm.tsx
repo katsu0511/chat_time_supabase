@@ -17,9 +17,9 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     if (user.name === name && user.language === language) {
-      setError('You don\'t change any account setting');
+      setError('You don\'t change any account settings');
       setLoading(false);
       return;
     }
