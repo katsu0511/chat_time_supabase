@@ -1,10 +1,21 @@
-import { addFriend } from '@/lib/api/actions';
 import { Button } from '@mui/material';
 
 export default function UserList(props: {user: AppUser, myId: string, friendIds: string[], onFriendAdded: (id: string) => void}) {
-  const handleAddFriend = async () => {
-    const result = await addFriend(props.myId, props.user.id);
-    if (result && props.onFriendAdded) props.onFriendAdded(props.user.id);
+  const addFriend = async () => {
+    const res = await fetch('/api/addFriend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ friendId: props.user.id }),
+    });
+
+    if (res.ok) {
+      props.onFriendAdded(props.user.id);
+    } else {
+      const data = await res.json();
+      alert(data.error);
+    }
   };
 
   return (
@@ -22,7 +33,7 @@ export default function UserList(props: {user: AppUser, myId: string, friendIds:
               color='secondary'
               disableElevation={true}
               disabled={props.friendIds.includes(props.user.id)}
-              onClick={handleAddFriend}
+              onClick={addFriend}
               sx={{
                 display: 'block',
                 color: 'white',
