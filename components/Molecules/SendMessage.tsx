@@ -4,15 +4,24 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {receiverId: string | undefined}) {
+type Props = {
+  receiverId: string | undefined
+  loading: boolean
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+};
+
+export default function SendMessage({ receiverId, loading, setLoading }: Props) {
   const [message, setMessage] = useState('');
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
-  const sendMessage = async (receiverId: string | undefined, content: string) => {
+  const sendMessage = async (content: string) => {
     content = content.trim();
     if (!content) return;
+
+    setLoading(true);
+    setMessage('');
 
     const res = await fetch('/api/sendMessage', {
       method: 'POST',
@@ -23,14 +32,15 @@ export default function SendMessage(props: {receiverId: string | undefined}) {
     });
 
     if (!res.ok) return null;
-    setMessage('');
+
+    setLoading(false);
   };
 
   return (
     <div className='flex w-full h-10'>
       <Input
         disableUnderline
-        disabled={ props.receiverId == undefined }
+        disabled={loading}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         sx={{
@@ -42,11 +52,12 @@ export default function SendMessage(props: {receiverId: string | undefined}) {
           sx: {
             display: 'block',
             border: '2px solid',
-            borderColor: theme.palette.secondary.main,
+            borderColor: loading ? '#9CA3AF' : theme.palette.secondary.main,
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
             p: 1,
+            cursor: loading ? 'not-allowed' : 'text',
             appearance: 'none'
           }
         }}
@@ -55,14 +66,18 @@ export default function SendMessage(props: {receiverId: string | undefined}) {
         variant='contained'
         color='secondary'
         disableElevation={true}
-        disabled={ props.receiverId == undefined || message.trim() == '' }
-        onClick={() => sendMessage(props.receiverId, message)}
+        disabled={ loading || message.trim() === '' }
+        onClick={() => sendMessage(message)}
         sx={{
           display: 'block',
           color: 'white',
           width: '80px',
           height: '100%',
-          borderRadius: '0'
+          borderRadius: '0',
+          '&.Mui-disabled': {
+            pointerEvents: 'unset',
+            cursor: loading || message.trim() === '' ? 'not-allowed' : 'pointer',
+          }
         }}
       >
         Send

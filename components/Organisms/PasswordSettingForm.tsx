@@ -14,30 +14,45 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState<string>('');
+  const [loading, setLoading] = useState(false);
   const { password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const preCheck = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
     const error = await checkPassword(user.email, currentPassword);
     if (error) {
-      setError('Current password is wrong');
+      setError(error.message);
+      setLoading(false);
       return;
     }
+
     if (password !== passwordConfirm) {
       setError('Password doesn\'t match');
+      setLoading(false);
       return;
     }
+
     if (currentPassword === password) {
       setError('You don\'t change your password');
+      setLoading(false);
       return;
     }
+
     setDialogOpen(true);
     setPendingData(passwordConfirm);
   };
 
   const changePassword = async () => {
-    if (!pendingData) return;
     setDialogOpen(false);
+
+    if (!pendingData) {
+      setError('Something went wrong');
+      setLoading(false);
+      return;
+    }
 
     const res = await fetch('/api/changePassword', {
       method: 'POST',
@@ -50,33 +65,41 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
     if (res.ok) {
       setSnackbarOpen(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      await handleLogout(router);
+      const error = await handleLogout();
+      if (error) {
+        alert(error.message);
+        setLoading(false);
+        return;
+      }
+      router.push('/');
+      router.refresh();
     } else {
       const data = await res.json();
       setError(data.error);
+      setPendingData(null);
+      setLoading(false);
     }
-
-    setPendingData(null);
   };
 
   const handleCancel = () => {
     setDialogOpen(false);
     setPendingData(null);
+    setLoading(false);
   };
 
   return (
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={(e) => preCheck(e)}>
         <Heading title='Password Setting' />
-        <Input label='Current Password' type='password' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
-        <Input label='New Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
-        <Input label='Password Confirm' type='password' value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}/>
-        <Button usage='Change' error={error} />
-        <PageLink path='' display='Account Setting' />
-        <PageLink path='email' display='Email Setting' />
-        <PageLink path='..' display='Setting' />
+        <Input label='Current Password' type='password' value={currentPassword} disabled={loading} onChange={(e) => setCurrentPassword(e.target.value)} />
+        <Input label='New Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)} />
+        <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
+        <Button usage='Change' error={error} disabled={loading} />
+        <PageLink path='' display='Account Setting' disabled={loading} />
+        <PageLink path='email' display='Email Setting' disabled={loading} />
+        <PageLink path='..' display='Setting' disabled={loading} />
       </form>
-      <Toast type='password' dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeAuthInfo={changePassword} />
+      <Toast type='password' dialogOpen={dialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeAuthInfo={changePassword} />
     </div>
   );
 }

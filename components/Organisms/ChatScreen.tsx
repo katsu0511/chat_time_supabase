@@ -1,18 +1,22 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import MessageContent from '@/components/Molecules/MessageContent';
+import { CircularProgress } from '@mui/material';
 import SendMessage from '@/components/Molecules/SendMessage';
 
-export default function ChatScreen(
-  {
-    user, friendId, friendName, messages, onBackToFriendList
-  }: {
-    user: AppUser, friendId: string | undefined, friendName: string | undefined, messages: Message[], onBackToFriendList: () => void
-  }) {
+type Props = {
+  user: AppUser
+  friend: AppUser | undefined
+  messages: Message[]
+  onBackToFriendList: () => void
+};
+
+export default function ChatScreen({ user, friend, messages, onBackToFriendList }: Props) {
+  const [loading, setLoading] = useState(false);
   const messageContainerRef = useRef<HTMLDivElement>(null);
-  const displayChatScreen = friendId === undefined ? 'hidden' : 'block';
+  const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
   const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)] min-h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)] min-h-[calc(100dvh-120px)]';
 
   useEffect(() => {
@@ -20,7 +24,7 @@ export default function ChatScreen(
       top: messageContainerRef.current.scrollHeight,
       behavior: 'auto'
     });
-  }, [messages]);
+  }, [messages, loading]);
 
   return (
     <div className={`${displayChatScreen} w-full h-full md:block md:w-[70%]`}>
@@ -33,17 +37,24 @@ export default function ChatScreen(
           height={26}
           alt='Back'
         />
-        <span className='text-xl font-bold pl-4'>{friendName}</span>
+        <span className='text-xl font-bold pl-4'>{friend?.name}</span>
       </div>
       <div ref={messageContainerRef} className={`bg-[color:var(--light-secondary)] w-full ${heightOfMessageContent} overflow-y-auto`}>
         {messages.map(message => (
           <MessageContent key={message.messageId} userId={user.id} message={message} />
         ))}
+        {
+          loading &&
+          <div className='flex justify-end items-center gap-[10px] pr-5 pb-2'>
+            <span className='animate-pulse'>Sending...</span>
+            <CircularProgress size={24} />
+          </div>
+        }
       </div>
       {
-        friendId === undefined
+        friend?.id === undefined
         ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-        : <SendMessage receiverId={friendId} />
+        : <SendMessage receiverId={friend.id} loading={loading} setLoading={setLoading} />
       }
     </div>
   );

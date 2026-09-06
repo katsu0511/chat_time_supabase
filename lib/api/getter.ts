@@ -1,6 +1,6 @@
 import prisma from '@/lib/infrastructure/prisma';
 
-export async function getUser(id: string) {
+export async function getUser(id: string): Promise<AppUser | null> {
   return await prisma.user.findUnique({
     where: {
       id,
@@ -50,7 +50,7 @@ export async function getFriends(userId: string): Promise<AppUser[]> {
   }));
 }
 
-export async function getMessages(userId: string, friendId: string) {
+export async function getMessages(userId: string, friendId: string): Promise<Message[]> {
   return await prisma.message.findMany({
     where: {
       OR: [

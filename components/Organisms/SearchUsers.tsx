@@ -59,7 +59,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
       />
       <ul className='block h-[calc(100dvh-302px)] text-center mt-5 overflow-y-scroll'>
         {users.map(user => (
-          <UserList key={user.id} user={user} myId={props.user.id} friendIds={friendIds} onFriendAdded={handleFriendAdded} />
+          <UserList key={user.id} user={user} myId={props.user.id} isFriend={friendIds.includes(user.id)} onFriendAdded={handleFriendAdded} />
         ))}
       </ul>
     </div>

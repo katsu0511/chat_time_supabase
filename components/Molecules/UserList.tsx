@@ -1,16 +1,34 @@
-import { addFriend } from '@/lib/api/actions';
+import { useState } from 'react';
 import { Button } from '@mui/material';
 
-export default function UserList(props: {user: AppUser, myId: string, friendIds: string[], onFriendAdded: (id: string) => void}) {
-  const handleAddFriend = async () => {
-    const result = await addFriend(props.myId, props.user.id);
-    if (result && props.onFriendAdded) props.onFriendAdded(props.user.id);
+export default function UserList(props: {user: AppUser, myId: string, isFriend: boolean, onFriendAdded: (id: string) => void}) {
+  const [loading, setLoading] = useState(false);
+
+  const addFriend = async () => {
+    setLoading(true);
+
+    const res = await fetch('/api/addFriend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ friendId: props.user.id }),
+    });
+
+    if (res.ok) {
+      props.onFriendAdded(props.user.id);
+    } else {
+      const data = await res.json();
+      alert(data.error);
+    }
+
+    setLoading(false);
   };
 
   return (
     <li key={props.user.id} className='w-full max-w-100 h-[50px] mx-auto px-5 my-0'>
       <div className='flex w-full h-full border-[color:var(--color-primary)] border-b-1'>
-        <div className='w-[calc(100%-72px)] max-w-82 h-full text-left px-2'>
+        <div className='w-[calc(100%-84px)] max-w-82 h-full text-left px-2'>
           <p className='text-xl w-full h-[25px]'>{props.user.name}</p>
           <p className='text-sm w-full h-6 leading-6'>{props.user.email}</p>
         </div>
@@ -21,20 +39,24 @@ export default function UserList(props: {user: AppUser, myId: string, friendIds:
               variant='contained'
               color='secondary'
               disableElevation={true}
-              disabled={props.friendIds.includes(props.user.id)}
-              onClick={handleAddFriend}
+              disabled={ loading || props.isFriend }
+              onClick={addFriend}
               sx={{
                 display: 'block',
                 color: 'white',
-                width: '64px',
+                width: '76px',
                 height: '36px',
                 borderRadius: '5px',
                 padding: 0,
                 marginTop: '7px',
-                marginBottom: '6px'
+                marginBottom: '6px',
+                '&.Mui-disabled': {
+                  pointerEvents: 'unset',
+                  cursor: loading || props.isFriend ? 'not-allowed' : 'pointer',
+                }
               }}
             >
-              {props.friendIds.includes(props.user.id) ? 'Friend' : 'Add'}
+              {loading ? 'Loading..' : props.isFriend ? 'Friend' : 'Add'}
             </Button>
           }
         </div>

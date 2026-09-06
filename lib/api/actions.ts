@@ -2,23 +2,9 @@
 
 import { Language } from '@/lib/domain/languages';
 import prisma from '@/lib/infrastructure/prisma';
-import { Prisma } from '@/lib/generated/prisma/client';
 
 export async function createUser(data: {id: string, name: string, email: string, language: Language}) {
-  try {
-    return await prisma.user.create({ data });
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.constructor.name === 'PrismaClientKnownRequestError' && (error as Prisma.PrismaClientKnownRequestError).code === 'P2002') {
-        console.error('This user ID is already used: ', error.message);
-        return `This user ID is already used.`;
-      }
-      console.error('General error: ', error);
-      return `General error`;
-    }
-    console.error('Unknown error: ', error);
-    return `Unknown error`;
-  }
+  return await prisma.user.create({ data });
 }
 
 export async function addFriend(userId: string, friendId: string) {
@@ -40,6 +26,7 @@ export async function addFriend(userId: string, friendId: string) {
     ],
     skipDuplicates: true
   });
+
   return rows.count;
 }
 
