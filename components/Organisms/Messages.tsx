@@ -5,16 +5,14 @@ import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import FriendList from '@/components/Organisms/FriendList';
 import ChatScreen from '@/components/Organisms/ChatScreen';
 
-export default function Messages({user, friends}: {user: AppUser, friends: AppUser[]}) {
+export default function Messages({ user, friends }: { user: AppUser, friends: AppUser[] }) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [friendId, setFriendId] = useState<string | undefined>();
-  const [friendName, setFriendName] = useState<string | undefined>();
-  const friendIdRef = useRef<string>(friendId);
+  const [chattingFriend, setChattingFriend] = useState<AppUser | undefined>();
+  const friendRef = useRef<AppUser>(chattingFriend);
 
-  const getMessages = useCallback(async (friendId: string, friendName: string) => {
-    setFriendId(friendId);
-    setFriendName(friendName);
-    const res = await fetch(`/api/getMessages?friendId=${friendId}`);
+  const getMessages = useCallback(async (friend: AppUser) => {
+    setChattingFriend(friend);
+    const res = await fetch(`/api/getMessages?friendId=${friend.id}`);
     if (!res.ok) {
       setMessages([]);
       return;
@@ -25,13 +23,12 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
 
   const backToFriendList = () => {
     setMessages([]);
-    setFriendId(undefined);
-    setFriendName(undefined);
+    setChattingFriend(undefined);
   };
 
   useEffect(() => {
-    friendIdRef.current = friendId;
-  }, [friendId]);
+    friendRef.current = chattingFriend;
+  }, [chattingFriend]);
 
   useEffect(() => {
     const channel = supabase
@@ -51,8 +48,8 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
           const isTranslated: boolean = newMessage.is_translated;
 
           if (
-            senderId === myId && receiverId === friendIdRef.current && !isTranslated ||
-            senderId === friendIdRef.current && receiverId === myId && isTranslated
+            senderId === myId && receiverId === friendRef.current?.id && !isTranslated ||
+            senderId === friendRef.current?.id && receiverId === myId && isTranslated
           ) {
             const message: Message = {
               messageId: newMessage.message_id,
@@ -75,8 +72,8 @@ export default function Messages({user, friends}: {user: AppUser, friends: AppUs
 
   return (
     <div className='block w-full h-full md:flex md:border-[color:var(--color-primary)] md:border-x-4'>
-      <FriendList friends={friends} currentFriendId={friendId} getMessages={getMessages} />
-      <ChatScreen user={user} friendId={friendId} friendName={friendName} messages={messages} onBackToFriendList={backToFriendList} />
+      <FriendList friends={friends} chattingFriend={chattingFriend} getMessages={getMessages} />
+      <ChatScreen user={user} friend={chattingFriend} messages={messages} onBackToFriendList={backToFriendList} />
     </div>
   );
 }
