@@ -24,7 +24,7 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
       top: messageContainerRef.current.scrollHeight,
       behavior: 'auto'
     });
-  }, [messages]);
+  }, [messages, loading]);
 
   return (
     <div className={`${displayChatScreen} w-full h-full md:block md:w-[70%]`}>
@@ -45,7 +45,7 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
         ))}
         {
           loading &&
-          <div className='flex justify-end items-center gap-[10px] pr-5'>
+          <div className='flex justify-end items-center gap-[10px] pr-5 pb-2'>
             <span className='animate-pulse'>Sending...</span>
             <CircularProgress size={24} />
           </div>
