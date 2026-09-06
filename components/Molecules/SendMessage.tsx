@@ -4,14 +4,19 @@ import { useState, useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage(props: {receiverId: string | undefined}) {
+type Props = {
+  receiverId: string | undefined
+  loading: boolean
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+};
+
+export default function SendMessage({ receiverId, loading, setLoading }: Props) {
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
-  const sendMessage = async (receiverId: string | undefined, content: string) => {
+  const sendMessage = async (content: string) => {
     content = content.trim();
     if (!content) return;
 
@@ -62,7 +67,7 @@ export default function SendMessage(props: {receiverId: string | undefined}) {
         color='secondary'
         disableElevation={true}
         disabled={ loading || message.trim() === '' }
-        onClick={() => sendMessage(props.receiverId, message)}
+        onClick={() => sendMessage(message)}
         sx={{
           display: 'block',
           color: 'white',
