@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
 
-export default function UserList(props: {user: AppUser, myId: string, friendIds: string[], onFriendAdded: (id: string) => void}) {
+export default function UserList(props: {user: AppUser, myId: string, isFriend: boolean, onFriendAdded: (id: string) => void}) {
   const [loading, setLoading] = useState(false);
 
   const addFriend = async () => {
@@ -39,7 +39,7 @@ export default function UserList(props: {user: AppUser, myId: string, friendIds:
               variant='contained'
               color='secondary'
               disableElevation={true}
-              disabled={loading || props.friendIds.includes(props.user.id)}
+              disabled={ loading || props.isFriend }
               onClick={addFriend}
               sx={{
                 display: 'block',
@@ -49,10 +49,14 @@ export default function UserList(props: {user: AppUser, myId: string, friendIds:
                 borderRadius: '5px',
                 padding: 0,
                 marginTop: '7px',
-                marginBottom: '6px'
+                marginBottom: '6px',
+                '&.Mui-disabled': {
+                  pointerEvents: 'unset',
+                  cursor: loading || props.isFriend ? 'not-allowed' : 'pointer',
+                }
               }}
             >
-              {loading ? 'Loading..' : props.friendIds.includes(props.user.id) ? 'Friend' : 'Add'}
+              {loading ? 'Loading..' : props.isFriend ? 'Friend' : 'Add'}
             </Button>
           }
         </div>
