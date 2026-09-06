@@ -51,11 +51,14 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     if (res.ok) {
       setSnackbarOpen(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      const error = await handleLogout(router);
+      const error = await handleLogout();
       if (error) {
         alert(error.message);
         setLoading(false);
+        return;
       }
+      router.push('/');
+      router.refresh();
     } else {
       const data = await res.json();
       setError(data.error);
