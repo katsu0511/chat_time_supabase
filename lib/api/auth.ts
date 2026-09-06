@@ -1,4 +1,3 @@
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import { Language } from '@/lib/domain/languages';
 import { createUser } from '@/lib/api/actions';
@@ -9,11 +8,9 @@ export const handleLogin = async (email: string, password: string) => {
   if (error) return { message: 'Failed to login' };
 };
 
-export const handleLogout = async (router: AppRouterInstance) => {
+export const handleLogout = async () => {
   const { error } = await supabase.auth.signOut();
   if (error) return { message: 'Failed to logout' };
-  router.push('/login');
-  router.refresh();
 };
 
 export const handleSignup = async (name: string, email: string, language: Language, password: string) => {
