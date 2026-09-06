@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import MessageContent from '@/components/Molecules/MessageContent';
+import { CircularProgress } from '@mui/material';
 import SendMessage from '@/components/Molecules/SendMessage';
 
 type Props = {
@@ -42,6 +43,13 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
         {messages.map(message => (
           <MessageContent key={message.messageId} userId={user.id} message={message} />
         ))}
+        {
+          loading &&
+          <div className='flex justify-end items-center gap-[10px] pr-5'>
+            <span className='animate-pulse'>Sending...</span>
+            <CircularProgress size={24} />
+          </div>
+        }
       </div>
       {
         friend?.id === undefined
