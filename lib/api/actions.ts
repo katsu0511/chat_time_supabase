@@ -26,6 +26,7 @@ export async function addFriend(userId: string, friendId: string) {
     ],
     skipDuplicates: true
   });
+
   return rows.count;
 }
 
