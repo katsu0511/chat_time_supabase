@@ -5,14 +5,16 @@ import Image from 'next/image';
 import MessageContent from '@/components/Molecules/MessageContent';
 import SendMessage from '@/components/Molecules/SendMessage';
 
-export default function ChatScreen(
-  {
-    user, friendId, friendName, messages, onBackToFriendList
-  }: {
-    user: AppUser, friendId: string | undefined, friendName: string | undefined, messages: Message[], onBackToFriendList: () => void
-  }) {
+type Props = {
+  user: AppUser
+  friend: AppUser | undefined
+  messages: Message[]
+  onBackToFriendList: () => void
+};
+
+export default function ChatScreen({ user, friend, messages, onBackToFriendList }: Props) {
   const messageContainerRef = useRef<HTMLDivElement>(null);
-  const displayChatScreen = friendId === undefined ? 'hidden' : 'block';
+  const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
   const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)] min-h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)] min-h-[calc(100dvh-120px)]';
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function ChatScreen(
           height={26}
           alt='Back'
         />
-        <span className='text-xl font-bold pl-4'>{friendName}</span>
+        <span className='text-xl font-bold pl-4'>{friend?.name}</span>
       </div>
       <div ref={messageContainerRef} className={`bg-[color:var(--light-secondary)] w-full ${heightOfMessageContent} overflow-y-auto`}>
         {messages.map(message => (
@@ -41,9 +43,9 @@ export default function ChatScreen(
         ))}
       </div>
       {
-        friendId === undefined
+        friend?.id === undefined
         ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-        : <SendMessage receiverId={friendId} />
+        : <SendMessage receiverId={friend.id} />
       }
     </div>
   );
