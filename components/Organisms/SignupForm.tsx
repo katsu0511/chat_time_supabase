@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { handleSignup } from '@/lib/api/auth';
 import Heading from '@/components/Atoms/Heading';
@@ -13,7 +14,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function SignupForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const { name, setName, email, setEmail, language, setLanguage, password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const signup = async(e: React.SubmitEvent<HTMLFormElement>) => {
