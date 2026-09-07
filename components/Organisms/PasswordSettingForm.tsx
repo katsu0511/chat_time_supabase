@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { checkPassword, handleLogout } from '@/lib/api/auth';
@@ -87,6 +87,10 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
     setPendingData(null);
     setLoading(false);
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
 
   return (
     <div className='flex items-center w-full h-full'>
