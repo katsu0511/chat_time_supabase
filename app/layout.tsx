@@ -3,6 +3,7 @@ import { Inconsolata } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { User as AuthUser } from '@supabase/supabase-js';
 import getAuthUser from '@/lib/auth/getAuthUser';
+import { LoadingProviderWrapper } from '@/components/Templates/LoadingProviderWrapper';
 import { ThemeProviderWrapper } from '@/components/Templates/ThemeProviderWrapper';
 import Header from '@/components/Organisms/Header';
 import Main from '@/components/Templates/Main';
@@ -25,11 +26,13 @@ export default async function RootLayout({
   return (
     <html lang='en' className='select-none'>
       <body className={fnt.className}>
-        <ThemeProviderWrapper>
-          <Header user={user} />
-          <Main>{children}</Main>
-          <Footer user={user} />
-        </ThemeProviderWrapper>
+        <LoadingProviderWrapper>
+          <ThemeProviderWrapper>
+            <Header user={user} />
+            <Main>{children}</Main>
+            <Footer user={user} />
+          </ThemeProviderWrapper>
+        </LoadingProviderWrapper>
       </body>
     </html>
   );
