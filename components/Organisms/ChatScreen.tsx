@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import MessageContent from '@/components/Molecules/MessageContent';
 import { CircularProgress } from '@mui/material';
@@ -14,7 +15,7 @@ type Props = {
 };
 
 export default function ChatScreen({ user, friend, messages, onBackToFriendList }: Props) {
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
   const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)] min-h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)] min-h-[calc(100dvh-120px)]';
