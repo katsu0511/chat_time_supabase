@@ -3,4 +3,4 @@ type AppUser = {
   name: string
   email: string
   language: string
-}
+};
