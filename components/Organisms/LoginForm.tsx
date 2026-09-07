@@ -39,7 +39,7 @@ export default function LoginForm() {
         <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
         <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
         <Button usage='Login' error={error} disabled={loading} />
-        <PageLink path='signup' display='Signup' disabled={loading} />
+        <PageLink path='signup' display='Signup' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully logged in' />
     </div>

@@ -95,9 +95,9 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
         <Input label='New Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)} />
         <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
         <Button usage='Change' error={error} disabled={loading} />
-        <PageLink path='' display='Account Setting' disabled={loading} />
-        <PageLink path='email' display='Email Setting' disabled={loading} />
-        <PageLink path='..' display='Setting' disabled={loading} />
+        <PageLink path='' display='Account Setting' />
+        <PageLink path='email' display='Email Setting' />
+        <PageLink path='..' display='Setting' />
       </form>
       <Toast type='password' dialogOpen={dialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeAuthInfo={changePassword} />
     </div>

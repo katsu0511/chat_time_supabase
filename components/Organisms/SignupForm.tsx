@@ -50,7 +50,7 @@ export default function SignupForm() {
         <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
         <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
         <Button usage='Signup' error={error} disabled={loading} />
-        <PageLink path='login' display='Login' disabled={loading} />
+        <PageLink path='login' display='Login' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully signed up' />
     </div>

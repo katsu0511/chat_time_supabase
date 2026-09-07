@@ -57,9 +57,9 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
         <Input label='Name' type='text' value={name} disabled={loading} onChange={(e) => setName(e.target.value)}/>
         <LanguageSelect label='Language' value={language} disabled={loading} onChange={(e) => setLanguage(e.target.value as Language)} />
         <Button usage='Change' error={error} disabled={loading} />
-        <PageLink path='account/email' display='Email Setting' disabled={loading} />
-        <PageLink path='account/password' display='Password Setting' disabled={loading} />
-        <PageLink path='' display='Setting' disabled={loading} />
+        <PageLink path='account/email' display='Email Setting' />
+        <PageLink path='account/password' display='Password Setting' />
+        <PageLink path='' display='Setting' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully changed your account settings' />
     </div>
