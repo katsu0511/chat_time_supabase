@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { handleLogin } from '@/lib/api/auth';
@@ -32,6 +32,10 @@ export default function LoginForm() {
     router.push('/');
     router.refresh();
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
 
   return (
     <div className='flex items-center w-full h-full'>
