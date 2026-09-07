@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import Heading from '@/components/Atoms/Heading';
 import { Input } from '@mui/material';
@@ -9,10 +10,7 @@ import UserList from '@/components/Molecules/UserList';
 export default function SearchUsers(props: {user: AppUser, friendIds: string[]}) {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [friendIds, setFriendIds] = useState<string[]>(props.friendIds);
-
-  const context = useContext(ThemeContext);
-  if (!context) return null;
-  const { colors } = context;
+  const { setLoading } = useLoading();
 
   const searchUsers = async (name: string) => {
     name = name.trim();
@@ -29,6 +27,14 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
   const handleFriendAdded = (newFriendId: string) => {
     setFriendIds((prev) => [...prev, newFriendId]);
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
+  const context = useContext(ThemeContext);
+  if (!context) return null;
+  const { colors } = context;
 
   return (
     <div className='w-full h-full'>
