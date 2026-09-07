@@ -2,12 +2,14 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
+import useLoading from '@/lib/hooks/useLoading';
 import FriendList from '@/components/Organisms/FriendList';
 import ChatScreen from '@/components/Organisms/ChatScreen';
 
 export default function Messages({ user, friends }: { user: AppUser, friends: AppUser[] }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [chattingFriend, setChattingFriend] = useState<AppUser | undefined>();
+  const { setLoading } = useLoading();
   const friendRef = useRef<AppUser>(chattingFriend);
 
   const getMessages = useCallback(async (friend: AppUser) => {
@@ -69,6 +71,10 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
       supabase.removeChannel(channel);
     };
   }, [user]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
 
   return (
     <div className='block w-full h-full md:flex md:border-[color:var(--color-primary)] md:border-x-4'>
