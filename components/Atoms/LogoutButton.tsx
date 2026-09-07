@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { handleLogout } from '@/lib/api/auth';
 import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function LogoutButton() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const { router } = useAuth();
 
   const buttonClassName = loading ? 'bg-gray-400 cursor-progress' : 'bg-[color:var(--color-primary)] cursor-pointer hover:bg-white hover:text-[color:var(--color-primary)]';
