@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import Heading from '@/components/Atoms/Heading';
 import Input from '@/components/Molecules/Input';
@@ -12,7 +13,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function AccountSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const { name, setName, language, setLanguage, error, setError, router } = useAuth();
 
   const changeSetting = async(e: React.SubmitEvent<HTMLFormElement>) => {
