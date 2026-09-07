@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { handleLogin } from '@/lib/api/auth';
 import Heading from '@/components/Atoms/Heading';
@@ -11,7 +12,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function LoginForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const { email, setEmail, password, setPassword, error, setError, router } = useAuth();
 
   const login = async (e: React.SubmitEvent) => {
