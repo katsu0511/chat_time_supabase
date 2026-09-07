@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import { Button } from '@mui/material';
 
 export default function UserList(props: {user: AppUser, myId: string, isFriend: boolean, onFriendAdded: (id: string) => void}) {
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
 
   const addFriend = async () => {
     setLoading(true);
