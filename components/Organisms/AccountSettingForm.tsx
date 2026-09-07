@@ -51,6 +51,10 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
     setLanguage(user.language as Language);
   }, [user, setName, setLanguage]);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
   return (
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={changeSetting}>
