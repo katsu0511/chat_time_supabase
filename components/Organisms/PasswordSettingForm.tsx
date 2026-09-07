@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { checkPassword, handleLogout } from '@/lib/api/auth';
 import Heading from '@/components/Atoms/Heading';
@@ -14,7 +15,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState<string>('');
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const { password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const preCheck = async (e: React.SubmitEvent<HTMLFormElement>) => {
