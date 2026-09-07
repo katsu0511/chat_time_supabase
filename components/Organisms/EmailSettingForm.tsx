@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import Heading from '@/components/Atoms/Heading';
 import Input from '@/components/Molecules/Input';
@@ -13,7 +14,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading } = useLoading();
   const { email, setEmail, error, setError, router } = useAuth();
 
   const preCheck = (e: React.SubmitEvent<HTMLFormElement>) => {
