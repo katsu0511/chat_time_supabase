@@ -78,6 +78,10 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     setEmail(user.email);
   }, [user, setEmail]);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
   return (
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={(e) => preCheck(e)}>
