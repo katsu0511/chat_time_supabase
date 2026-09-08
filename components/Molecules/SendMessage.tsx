@@ -1,12 +1,18 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import useLoading from '@/lib/hooks/useLoading';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-export default function SendMessage({ receiverId }: { receiverId: string | undefined }) {
-  const [message, setMessage] = useState('');
+type Props = {
+  receiverId: string | undefined
+  message: string
+  setMessage: Dispatch<SetStateAction<string>>
+};
+
+export default function SendMessage({ receiverId, message, setMessage }: Props) {
+
   const { loading, setLoading, setSendingState } = useLoading();
   const context = useContext(ThemeContext);
   if (!context) return null;
