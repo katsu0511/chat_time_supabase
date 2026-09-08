@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function ChatScreen({ user, friend, messages, onBackToFriendList }: Props) {
-  const { loading, setLoading } = useLoading();
+  const { sendingState } = useLoading();
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
   const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)] min-h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)] min-h-[calc(100dvh-120px)]';
@@ -25,7 +25,7 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
       top: messageContainerRef.current.scrollHeight,
       behavior: 'auto'
     });
-  }, [messages, loading]);
+  }, [messages, sendingState]);
 
   return (
     <div className={`${displayChatScreen} w-full h-full md:block md:w-[70%]`}>
@@ -45,7 +45,7 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
           <MessageContent key={message.messageId} userId={user.id} message={message} />
         ))}
         {
-          loading &&
+          sendingState &&
           <div className='flex justify-end items-center gap-[10px] pr-5 pb-2'>
             <span className='animate-pulse'>Sending...</span>
             <CircularProgress size={24} />
@@ -55,7 +55,7 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
       {
         friend?.id === undefined
         ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-        : <SendMessage receiverId={friend.id} loading={loading} setLoading={setLoading} />
+        : <SendMessage receiverId={friend.id} />
       }
     </div>
   );
