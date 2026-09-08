@@ -14,6 +14,9 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
   const friendRef = useRef<AppUser>(chattingFriend);
 
   const getMessages = useCallback(async (friend: AppUser) => {
+    setLoading(true);
+    setMessages([]);
+
     if (friendRef.current?.id !== friend.id) {
       setMessage('');
     }
@@ -27,7 +30,8 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
 
     const contents: Message[] = await res.json();
     setMessages(contents);
-  }, []);
+    setLoading(false);
+  }, [setLoading]);
 
   const backToFriendList = () => {
     setMessages([]);
