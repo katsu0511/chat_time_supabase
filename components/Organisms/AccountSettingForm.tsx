@@ -14,7 +14,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 export default function AccountSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [hasClicked, setHasClicked] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { setLoading } = useLoading();
   const { name, setName, language, setLanguage, error, setError, router } = useAuth();
 
   const changeSetting = async(e: React.SubmitEvent<HTMLFormElement>) => {
@@ -63,8 +63,8 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={changeSetting}>
         <Heading title='Account Setting' />
-        <Input label='Name' type='text' value={name} disabled={loading} onChange={(e) => setName(e.target.value)}/>
-        <LanguageSelect label='Language' value={language} disabled={loading} onChange={(e) => setLanguage(e.target.value as Language)} />
+        <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+        <LanguageSelect label='Language' value={language} onChange={(e) => setLanguage(e.target.value as Language)} />
         <Button usage='Change' error={error} hasClicked={hasClicked} />
         <PageLink path='account/email' display='Email Setting' />
         <PageLink path='account/password' display='Password Setting' />
