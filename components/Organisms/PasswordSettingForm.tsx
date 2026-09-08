@@ -15,30 +15,35 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState<string>('');
+  const [hasClicked, setHasClicked] = useState(false);
   const { loading, setLoading } = useLoading();
   const { password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const preCheck = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     const error = await checkPassword(user.email, currentPassword);
     if (error) {
       setError(error.message);
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
     if (password !== passwordConfirm) {
       setError('Password doesn\'t match');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
     if (currentPassword === password) {
       setError('You don\'t change your password');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -52,6 +57,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
     if (!pendingData) {
       setError('Something went wrong');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -70,6 +76,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
       if (error) {
         alert(error.message);
         setLoading(false);
+        setHasClicked(false);
         return;
       }
       router.push('/');
@@ -79,6 +86,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
       setError(data.error);
       setPendingData(null);
       setLoading(false);
+      setHasClicked(false);
     }
   };
 
@@ -86,6 +94,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
     setDialogOpen(false);
     setPendingData(null);
     setLoading(false);
+    setHasClicked(false);
   };
 
   useEffect(() => {
@@ -99,7 +108,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
         <Input label='Current Password' type='password' value={currentPassword} disabled={loading} onChange={(e) => setCurrentPassword(e.target.value)} />
         <Input label='New Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)} />
         <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
-        <Button usage='Change' error={error} disabled={loading} />
+        <Button usage='Change' error={error} hasClicked={hasClicked} />
         <PageLink path='' display='Account Setting' />
         <PageLink path='email' display='Email Setting' />
         <PageLink path='..' display='Setting' />
