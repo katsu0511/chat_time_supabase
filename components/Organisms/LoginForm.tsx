@@ -13,7 +13,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 export default function LoginForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [hasClicked, setHasClicked] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { setLoading } = useLoading();
   const { email, setEmail, password, setPassword, error, setError, router } = useAuth();
 
   const login = async (e: React.SubmitEvent) => {
@@ -44,8 +44,8 @@ export default function LoginForm() {
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={login}>
         <Heading title='Login' />
-        <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
-        <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
+        <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         <Button usage='Login' error={error} hasClicked={hasClicked} />
         <PageLink path='signup' display='Signup' />
       </form>
