@@ -15,7 +15,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [hasClicked, setHasClicked] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { setLoading } = useLoading();
   const { email, setEmail, error, setError, router } = useAuth();
 
   const preCheck = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -93,7 +93,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={(e) => preCheck(e)}>
         <Heading title='Email Setting' />
-        <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
+        <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
         <Button usage='Change' error={error} hasClicked={hasClicked} />
         <PageLink path='' display='Account Setting' />
         <PageLink path='password' display='Password Setting' />
