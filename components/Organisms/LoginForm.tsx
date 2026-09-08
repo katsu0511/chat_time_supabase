@@ -12,18 +12,21 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function LoginForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
   const { loading, setLoading } = useLoading();
   const { email, setEmail, password, setPassword, error, setError, router } = useAuth();
 
   const login = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     const error = await handleLogin(email, password);
     if (error) {
       setError(error.message);
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -43,7 +46,7 @@ export default function LoginForm() {
         <Heading title='Login' />
         <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
         <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
-        <Button usage='Login' error={error} disabled={loading} />
+        <Button usage='Login' error={error} hasClicked={hasClicked} />
         <PageLink path='signup' display='Signup' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully logged in' />
