@@ -15,7 +15,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 export default function SignupForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [hasClicked, setHasClicked] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { setLoading } = useLoading();
   const { name, setName, email, setEmail, language, setLanguage, password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const signup = async(e: React.SubmitEvent<HTMLFormElement>) => {
@@ -53,11 +53,11 @@ export default function SignupForm() {
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={signup}>
         <Heading title='Signup' />
-        <Input label='Name' type='text' value={name} disabled={loading} onChange={(e) => setName(e.target.value)}/>
-        <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
-        <LanguageSelect label='Language' value={language} disabled={loading} onChange={(e) => setLanguage(e.target.value as Language)} />
-        <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
-        <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
+        <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+        <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <LanguageSelect label='Language' value={language} onChange={(e) => setLanguage(e.target.value as Language)} />
+        <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+        <Input label='Password Confirm' type='password' value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}/>
         <Button usage='Signup' error={error} hasClicked={hasClicked} />
         <PageLink path='login' display='Login' />
       </form>
