@@ -16,7 +16,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState<string>('');
   const [hasClicked, setHasClicked] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { setLoading } = useLoading();
   const { password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const preCheck = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -105,9 +105,9 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={(e) => preCheck(e)}>
         <Heading title='Password Setting' />
-        <Input label='Current Password' type='password' value={currentPassword} disabled={loading} onChange={(e) => setCurrentPassword(e.target.value)} />
-        <Input label='New Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)} />
-        <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
+        <Input label='Current Password' type='password' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+        <Input label='New Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Input label='Password Confirm' type='password' value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}/>
         <Button usage='Change' error={error} hasClicked={hasClicked} />
         <PageLink path='' display='Account Setting' />
         <PageLink path='email' display='Email Setting' />
