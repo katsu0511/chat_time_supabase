@@ -1,7 +1,7 @@
 'use client';
 
+import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
 import useLoading from '@/lib/hooks/useLoading';
-import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import MessageContent from '@/components/Molecules/MessageContent';
 import { CircularProgress } from '@mui/material';
@@ -11,10 +11,12 @@ type Props = {
   user: AppUser
   friend: AppUser | undefined
   messages: Message[]
+  message: string
+  setMessage: Dispatch<SetStateAction<string>>
   onBackToFriendList: () => void
 };
 
-export default function ChatScreen({ user, friend, messages, onBackToFriendList }: Props) {
+export default function ChatScreen({ user, friend, messages, message, setMessage, onBackToFriendList }: Props) {
   const { sendingState } = useLoading();
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
@@ -55,7 +57,7 @@ export default function ChatScreen({ user, friend, messages, onBackToFriendList 
       {
         friend?.id === undefined
         ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-        : <SendMessage receiverId={friend.id} />
+        : <SendMessage receiverId={friend.id} message={message} setMessage={setMessage} />
       }
     </div>
   );
