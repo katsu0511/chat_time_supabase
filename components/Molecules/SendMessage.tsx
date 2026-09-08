@@ -1,17 +1,13 @@
 'use client';
 
 import { useState, useContext } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
-type Props = {
-  receiverId: string | undefined
-  loading: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
-};
-
-export default function SendMessage({ receiverId, loading, setLoading }: Props) {
+export default function SendMessage({ receiverId }: { receiverId: string | undefined }) {
   const [message, setMessage] = useState('');
+  const { loading, setLoading, setSendingState } = useLoading();
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
@@ -21,6 +17,7 @@ export default function SendMessage({ receiverId, loading, setLoading }: Props) 
     if (!content) return;
 
     setLoading(true);
+    setSendingState(true);
     setMessage('');
 
     const res = await fetch('/api/sendMessage', {
@@ -34,6 +31,7 @@ export default function SendMessage({ receiverId, loading, setLoading }: Props) 
     if (!res.ok) return null;
 
     setLoading(false);
+    setSendingState(false);
   };
 
   return (
