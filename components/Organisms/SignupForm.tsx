@@ -14,17 +14,20 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function SignupForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
   const { loading, setLoading } = useLoading();
   const { name, setName, email, setEmail, language, setLanguage, password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const signup = async(e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     if (password !== passwordConfirm) {
       setError('Password doesn\'t match');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -32,6 +35,7 @@ export default function SignupForm() {
     if (error) {
       setError(error.message);
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -54,7 +58,7 @@ export default function SignupForm() {
         <LanguageSelect label='Language' value={language} disabled={loading} onChange={(e) => setLanguage(e.target.value as Language)} />
         <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
         <Input label='Password Confirm' type='password' value={passwordConfirm} disabled={loading} onChange={(e) => setPasswordConfirm(e.target.value)}/>
-        <Button usage='Signup' error={error} disabled={loading} />
+        <Button usage='Signup' error={error} hasClicked={hasClicked} />
         <PageLink path='login' display='Login' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully signed up' />
