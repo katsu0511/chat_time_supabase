@@ -5,20 +5,20 @@ import { PaletteMode, FormLabel, RadioGroup } from '@mui/material';
 import { useContext } from 'react';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 
-export default function ThemeWrapper(
-  props: {
-    label: string,
-    value: ThemeColor | PaletteMode,
-    toggle: (() => void) | ((newColor: ThemeColor) => void),
-    children: React.ReactNode
-  }
-) {
+type Props = {
+  label: string
+  value: ThemeColor | PaletteMode
+  toggle: (() => void) | ((newColor: ThemeColor) => void)
+  children: React.ReactNode
+};
+
+export default function ThemeWrapper({ label, value, toggle, children }: Props) {
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
   return (
-    <div className={`flex flex-wrap justify-center items-center w-full h-auto ${props.label === 'Theme' && 'mb-10'}`}>
+    <div className={`flex flex-wrap justify-center items-center w-full h-auto ${label === 'Theme' && 'mb-10'}`}>
       <FormLabel
         component='legend'
         sx={{
@@ -27,12 +27,12 @@ export default function ThemeWrapper(
           textAlign: 'center'
         }}
       >
-        {props.label}
+        {label}
       </FormLabel>
       <RadioGroup
-        name={props.label.toLocaleLowerCase()}
-        value={props.value}
-        onChange={(e) => props.toggle(e.target.value as ThemeColor)}
+        name={label.toLocaleLowerCase()}
+        value={value}
+        onChange={(e) => toggle(e.target.value as ThemeColor)}
         sx={{
           display: 'flex',
           justifyContent: 'center',
@@ -41,7 +41,7 @@ export default function ThemeWrapper(
         row
       >
         <div className='flex flex-wrap justify-center w-75 xl:w-full'>
-          {props.children}
+          {children}
         </div>
       </RadioGroup>
     </div>
