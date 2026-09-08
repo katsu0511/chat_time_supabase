@@ -14,17 +14,20 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
+  const [hasClicked, setHasClicked] = useState(false);
   const { loading, setLoading } = useLoading();
   const { email, setEmail, error, setError, router } = useAuth();
 
   const preCheck = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     if (user.email === email) {
       setError('You don\'t change your email');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -38,6 +41,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     if (!pendingData) {
       setError('Something went wrong');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -56,6 +60,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       if (error) {
         alert(error.message);
         setLoading(false);
+        setHasClicked(false);
         return;
       }
       router.push('/');
@@ -65,6 +70,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       setError(data.error);
       setPendingData(null);
       setLoading(false);
+      setHasClicked(false);
     }
   };
 
@@ -72,6 +78,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     setDialogOpen(false);
     setPendingData(null);
     setLoading(false);
+    setHasClicked(false);
   };
 
   useEffect(() => {
@@ -87,7 +94,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       <form className='w-full' onSubmit={(e) => preCheck(e)}>
         <Heading title='Email Setting' />
         <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
-        <Button usage='Change' error={error} disabled={loading} />
+        <Button usage='Change' error={error} hasClicked={hasClicked} />
         <PageLink path='' display='Account Setting' />
         <PageLink path='password' display='Password Setting' />
         <PageLink path='..' display='Setting' />
