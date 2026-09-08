@@ -12,7 +12,6 @@ type Props = {
 };
 
 export default function SendMessage({ receiverId, message, setMessage }: Props) {
-
   const { loading, setLoading, setSendingState } = useLoading();
   const context = useContext(ThemeContext);
   if (!context) return null;
