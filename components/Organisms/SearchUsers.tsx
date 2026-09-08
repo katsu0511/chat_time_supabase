@@ -10,7 +10,7 @@ import UserList from '@/components/Molecules/UserList';
 export default function SearchUsers(props: {user: AppUser, friendIds: string[]}) {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [friendIds, setFriendIds] = useState<string[]>(props.friendIds);
-  const { setLoading } = useLoading();
+  const { loading, setLoading } = useLoading();
 
   const searchUsers = async (name: string) => {
     name = name.trim();
@@ -41,6 +41,7 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
       <Heading title='Search Users' />
       <Input
         disableUnderline
+        disabled={loading}
         sx={{
           display: 'block',
           width: '100%',
@@ -53,11 +54,12 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
           sx: {
             display: 'block',
             border: '2px solid',
-            borderColor: colors.main,
+            borderColor: loading ? '#9CA3AF' : colors.main,
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
             p: 1,
+            cursor: loading ? 'not-allowed' : 'text',
             appearance: 'none'
           }
         }}
