@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
 import useLoading from '@/lib/hooks/useLoading';
 import FriendList from '@/components/Organisms/FriendList';
@@ -10,10 +10,10 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [chattingFriend, setChattingFriend] = useState<AppUser | undefined>();
-  const { setLoading } = useLoading();
+  const { setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const friendRef = useRef<AppUser>(chattingFriend);
 
-  const getMessages = useCallback(async (friend: AppUser) => {
+  const getMessages = async (friend: AppUser) => {
     if (friendRef.current?.id !== friend.id) {
       setLoading(true);
       setMessages([]);
@@ -28,11 +28,12 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
       setMessages(contents);
     } else {
       const data = await res.json();
-      alert(data.error);
+      setErrorMessage(data.error);
+      setDisplayErrorModal(true);
     }
 
     setLoading(false);
-  }, [setLoading]);
+  };
 
   const backToFriendList = () => {
     setMessages([]);
