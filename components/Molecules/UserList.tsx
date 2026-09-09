@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 
 export default function UserList(props: {user: AppUser, myId: string, isFriend: boolean, onFriendAdded: (id: string) => void}) {
   const [hasClicked, setHasClicked] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { loading, setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
 
   const addFriend = async () => {
     setLoading(true);
@@ -22,7 +22,8 @@ export default function UserList(props: {user: AppUser, myId: string, isFriend: 
       props.onFriendAdded(props.user.id);
     } else {
       const data = await res.json();
-      alert(data.error);
+      setErrorMessage(data.error);
+      setDisplayErrorModal(true);
     }
 
     setLoading(false);
