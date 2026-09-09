@@ -6,7 +6,7 @@ export default function ErrorModal() {
 
   return (
     <div className='fixed top-0 left-0 flex justify-center items-center bg-black/80 w-full h-full z-100'>
-      <div className='flex justify-center items-center bg-white w-70 h-50 rounded-lg'>
+      <div className='flex justify-center items-center bg-white w-70 h-40 rounded-lg'>
         <div className='text-center'>
           <p className='w-full mb-5'>{errorMessage}</p>
           <Button
