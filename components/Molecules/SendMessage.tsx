@@ -18,12 +18,17 @@ export default function SendMessage({ receiverId, message, setMessage }: Props) 
   const { theme } = context;
 
   const sendMessage = async (content: string) => {
-    content = content.trim();
-    if (!content) return;
-
     setLoading(true);
     setSendingState(true);
     setMessage('');
+
+    content = content.trim();
+    if (!content) {
+      alert('Something went wrong');
+      setLoading(false);
+      setSendingState(false);
+      return;
+    }
 
     const res = await fetch('/api/sendMessage', {
       method: 'POST',
@@ -33,7 +38,10 @@ export default function SendMessage({ receiverId, message, setMessage }: Props) 
       body: JSON.stringify({ receiverId, content }),
     });
 
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const data = await res.json();
+      alert(data.error);
+    }
 
     setLoading(false);
     setSendingState(false);
