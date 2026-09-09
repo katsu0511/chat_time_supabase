@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function SendMessage({ receiverId, message, setMessage }: Props) {
-  const { loading, setLoading, setSendingState } = useLoading();
+  const { loading, setLoading, setSendingState, setErrorMessage, setDisplayErrorModal } = useLoading();
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
@@ -24,7 +24,8 @@ export default function SendMessage({ receiverId, message, setMessage }: Props) 
 
     content = content.trim();
     if (!content) {
-      alert('Something went wrong');
+      setErrorMessage('Something went wrong');
+      setDisplayErrorModal(true);
       setLoading(false);
       setSendingState(false);
       return;
@@ -40,7 +41,8 @@ export default function SendMessage({ receiverId, message, setMessage }: Props) 
 
     if (!res.ok) {
       const data = await res.json();
-      alert(data.error);
+      setErrorMessage(data.error);
+      setDisplayErrorModal(true);
     }
 
     setLoading(false);
