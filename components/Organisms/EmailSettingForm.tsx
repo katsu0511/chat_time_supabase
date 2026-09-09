@@ -15,7 +15,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [hasClicked, setHasClicked] = useState(false);
-  const { setLoading } = useLoading();
+  const { setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const { email, setEmail, error, setError, router } = useAuth();
 
   const preCheck = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -58,7 +58,8 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const error = await handleLogout();
       if (error) {
-        alert(error.message);
+        setErrorMessage(error.message);
+        setDisplayErrorModal(true);
         setLoading(false);
         setHasClicked(false);
         return;
