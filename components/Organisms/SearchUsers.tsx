@@ -18,8 +18,10 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
       setUsers([]);
       return;
     }
+
     let users: AppUser[] = [];
     const res = await fetch(`/api/getUsersByName?name=${name}`);
+
     if (res.ok) users = await res.json();
     setUsers(users);
   };
