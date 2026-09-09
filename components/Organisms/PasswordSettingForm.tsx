@@ -16,7 +16,7 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
   const [pendingData, setPendingData] = useState<string | null>(null);
   const [currentPassword, setCurrentPassword] = useState<string>('');
   const [hasClicked, setHasClicked] = useState(false);
-  const { setLoading } = useLoading();
+  const { setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const { password, setPassword, passwordConfirm, setPasswordConfirm, error, setError, router } = useAuth();
 
   const preCheck = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -74,7 +74,8 @@ export default function PasswordSettingForm({ user }: { user: AppUser }) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const error = await handleLogout();
       if (error) {
-        alert(error.message);
+        setErrorMessage(error.message);
+        setDisplayErrorModal(true);
         setLoading(false);
         setHasClicked(false);
         return;
