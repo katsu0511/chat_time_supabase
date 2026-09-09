@@ -2,7 +2,12 @@ import useLoading from '@/lib/hooks/useLoading';
 import { Button } from '@mui/material';
 
 export default function ErrorModal() {
-  const { errorMessage, setDisplayErrorModal } = useLoading();
+  const { errorMessage, setErrorMessage, setDisplayErrorModal } = useLoading();
+
+  const deleteErrorModal = () => {
+    setDisplayErrorModal(false);
+    setErrorMessage('');
+  };
 
   return (
     <div className='fixed top-0 left-0 flex justify-center items-center bg-black/80 w-full h-full z-100'>
@@ -12,7 +17,7 @@ export default function ErrorModal() {
           <Button
             variant='contained'
             color='secondary'
-            onClick={() => setDisplayErrorModal(false)}
+            onClick={deleteErrorModal}
             sx={{ color: 'white' }}
           >
             OK
