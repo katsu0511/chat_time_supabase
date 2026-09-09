@@ -9,7 +9,7 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 export default function LogoutButton() {
   const [hasClicked, setHasClicked] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const { loading, setLoading } = useLoading();
+  const { loading, setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const { router } = useAuth();
 
   const buttonClassName = hasClicked ? 'bg-gray-400 cursor-progress' : loading ? 'bg-[color:var(--color-primary)] cursor-not-allowed' : 'bg-[color:var(--color-primary)] cursor-pointer hover:bg-white hover:text-[color:var(--color-primary)]';
@@ -20,7 +20,8 @@ export default function LogoutButton() {
 
     const error = await handleLogout();
     if (error) {
-      alert(error.message);
+      setErrorMessage(error.message);
+      setDisplayErrorModal(true);
       setLoading(false);
       setHasClicked(false);
       return;
