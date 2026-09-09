@@ -14,22 +14,23 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
   const friendRef = useRef<AppUser>(chattingFriend);
 
   const getMessages = useCallback(async (friend: AppUser) => {
-    setLoading(true);
-    setMessages([]);
-
     if (friendRef.current?.id !== friend.id) {
+      setLoading(true);
+      setMessages([]);
       setMessage('');
+      setChattingFriend(friend);
     }
-    setChattingFriend(friend);
 
     const res = await fetch(`/api/getMessages?friendId=${friend.id}`);
-    if (!res.ok) {
-      setMessages([]);
-      return;
+
+    if (res.ok) {
+      const contents: Message[] = await res.json();
+      setMessages(contents);
+    } else {
+      const data = await res.json();
+      alert(data.error);
     }
 
-    const contents: Message[] = await res.json();
-    setMessages(contents);
     setLoading(false);
   }, [setLoading]);
 
