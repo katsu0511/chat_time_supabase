@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import { Button } from '@mui/material';
 
 export default function UserList(props: {user: AppUser, myId: string, isFriend: boolean, onFriendAdded: (id: string) => void}) {
-  const [loading, setLoading] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
+  const { loading, setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
 
   const addFriend = async () => {
     setLoading(true);
+    setHasClicked(true);
 
     const res = await fetch('/api/addFriend', {
       method: 'POST',
@@ -19,10 +22,12 @@ export default function UserList(props: {user: AppUser, myId: string, isFriend: 
       props.onFriendAdded(props.user.id);
     } else {
       const data = await res.json();
-      alert(data.error);
+      setErrorMessage(data.error);
+      setDisplayErrorModal(true);
     }
 
     setLoading(false);
+    setHasClicked(false);
   };
 
   return (
@@ -56,7 +61,7 @@ export default function UserList(props: {user: AppUser, myId: string, isFriend: 
                 }
               }}
             >
-              {loading ? 'Loading..' : props.isFriend ? 'Friend' : 'Add'}
+              {hasClicked ? 'Loading..' : props.isFriend ? 'Friend' : 'Add'}
             </Button>
           }
         </div>

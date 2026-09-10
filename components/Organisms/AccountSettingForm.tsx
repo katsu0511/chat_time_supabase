@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import Heading from '@/components/Atoms/Heading';
 import Input from '@/components/Molecules/Input';
@@ -12,17 +13,20 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function AccountSettingForm({ user }: { user: AppUser }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
+  const { setLoading } = useLoading();
   const { name, setName, language, setLanguage, error, setError, router } = useAuth();
 
   const changeSetting = async(e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     if (user.name === name && user.language === language) {
       setError('You don\'t change any account settings');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -42,6 +46,7 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
     }
 
     setLoading(false);
+    setHasClicked(false);
     router.refresh();
   };
 
@@ -50,16 +55,20 @@ export default function AccountSettingForm({ user }: { user: AppUser }) {
     setLanguage(user.language as Language);
   }, [user, setName, setLanguage]);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
   return (
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={changeSetting}>
         <Heading title='Account Setting' />
-        <Input label='Name' type='text' value={name} disabled={loading} onChange={(e) => setName(e.target.value)}/>
-        <LanguageSelect label='Language' value={language} disabled={loading} onChange={(e) => setLanguage(e.target.value as Language)} />
-        <Button usage='Change' error={error} disabled={loading} />
-        <PageLink path='account/email' display='Email Setting' disabled={loading} />
-        <PageLink path='account/password' display='Password Setting' disabled={loading} />
-        <PageLink path='' display='Setting' disabled={loading} />
+        <Input label='Name' type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+        <LanguageSelect label='Language' value={language} onChange={(e) => setLanguage(e.target.value as Language)} />
+        <Button usage='Change' error={error} hasClicked={hasClicked} />
+        <PageLink path='account/email' display='Email Setting' />
+        <PageLink path='account/password' display='Password Setting' />
+        <PageLink path='' display='Setting' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully changed your account settings' />
     </div>

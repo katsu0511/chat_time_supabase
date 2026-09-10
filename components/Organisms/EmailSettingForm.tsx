@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import Heading from '@/components/Atoms/Heading';
 import Input from '@/components/Molecules/Input';
@@ -13,17 +14,20 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [pendingData, setPendingData] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
+  const { setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const { email, setEmail, error, setError, router } = useAuth();
 
   const preCheck = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     if (user.email === email) {
       setError('You don\'t change your email');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -37,6 +41,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     if (!pendingData) {
       setError('Something went wrong');
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -53,8 +58,10 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const error = await handleLogout();
       if (error) {
-        alert(error.message);
+        setErrorMessage(error.message);
+        setDisplayErrorModal(true);
         setLoading(false);
+        setHasClicked(false);
         return;
       }
       router.push('/');
@@ -64,6 +71,7 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
       setError(data.error);
       setPendingData(null);
       setLoading(false);
+      setHasClicked(false);
     }
   };
 
@@ -71,21 +79,26 @@ export default function EmailSettingForm({ user }: { user: AppUser }) {
     setDialogOpen(false);
     setPendingData(null);
     setLoading(false);
+    setHasClicked(false);
   };
 
   useEffect(() => {
     setEmail(user.email);
   }, [user, setEmail]);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
   return (
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={(e) => preCheck(e)}>
         <Heading title='Email Setting' />
-        <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
-        <Button usage='Change' error={error} disabled={loading} />
-        <PageLink path='' display='Account Setting' disabled={loading} />
-        <PageLink path='password' display='Password Setting' disabled={loading} />
-        <PageLink path='..' display='Setting' disabled={loading} />
+        <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Button usage='Change' error={error} hasClicked={hasClicked} />
+        <PageLink path='' display='Account Setting' />
+        <PageLink path='password' display='Password Setting' />
+        <PageLink path='..' display='Setting' />
       </form>
       <Toast type='email' dialogOpen={dialogOpen} snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} handleCancel={handleCancel} changeAuthInfo={changeEmail} />
     </div>

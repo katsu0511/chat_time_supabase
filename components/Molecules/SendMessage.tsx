@@ -1,27 +1,39 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import { Input, Button } from '@mui/material';
 
 type Props = {
   receiverId: string | undefined
-  loading: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  message: string
+  setMessage: Dispatch<SetStateAction<string>>
+  setSendingMessage: Dispatch<SetStateAction<string>>
 };
 
-export default function SendMessage({ receiverId, loading, setLoading }: Props) {
-  const [message, setMessage] = useState('');
+export default function SendMessage({ receiverId, message, setMessage, setSendingMessage }: Props) {
+  const { loading, setLoading, setSendingState, setErrorMessage, setDisplayErrorModal } = useLoading();
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
   const sendMessage = async (content: string) => {
-    content = content.trim();
-    if (!content) return;
-
+    setSendingMessage('Checking...');
     setLoading(true);
+    setSendingState(true);
     setMessage('');
+
+    content = content.trim();
+    if (!content) {
+      setErrorMessage('Something went wrong');
+      setDisplayErrorModal(true);
+      setLoading(false);
+      setSendingState(false);
+      return;
+    }
+
+    setSendingMessage('Translating...');
 
     const res = await fetch('/api/sendMessage', {
       method: 'POST',
@@ -31,9 +43,16 @@ export default function SendMessage({ receiverId, loading, setLoading }: Props) 
       body: JSON.stringify({ receiverId, content }),
     });
 
-    if (!res.ok) return null;
+    setSendingMessage('Sending...');
+
+    if (!res.ok) {
+      const data = await res.json();
+      setErrorMessage(data.error);
+      setDisplayErrorModal(true);
+    }
 
     setLoading(false);
+    setSendingState(false);
   };
 
   return (

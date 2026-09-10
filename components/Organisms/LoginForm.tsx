@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import useAuth from '@/lib/hooks/useAuth';
 import { handleLogin } from '@/lib/api/auth';
 import Heading from '@/components/Atoms/Heading';
@@ -11,18 +12,21 @@ import Snackbar from '@/components/Atoms/SuccessSnackbar';
 
 export default function LoginForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
+  const { setLoading } = useLoading();
   const { email, setEmail, password, setPassword, error, setError, router } = useAuth();
 
   const login = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setLoading(true);
+    setHasClicked(true);
     setError('');
 
     const error = await handleLogin(email, password);
     if (error) {
       setError(error.message);
       setLoading(false);
+      setHasClicked(false);
       return;
     }
 
@@ -32,14 +36,18 @@ export default function LoginForm() {
     router.refresh();
   };
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
   return (
     <div className='flex items-center w-full h-full'>
       <form className='w-full' onSubmit={login}>
         <Heading title='Login' />
-        <Input label='Email' type='email' value={email} disabled={loading} onChange={(e) => setEmail(e.target.value)} />
-        <Input label='Password' type='password' value={password} disabled={loading} onChange={(e) => setPassword(e.target.value)}/>
-        <Button usage='Login' error={error} disabled={loading} />
-        <PageLink path='signup' display='Signup' disabled={loading} />
+        <Input label='Email' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input label='Password' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+        <Button usage='Login' error={error} hasClicked={hasClicked} />
+        <PageLink path='signup' display='Signup' />
       </form>
       <Snackbar snackbarOpen={snackbarOpen} setSnackbarOpen={setSnackbarOpen} message='Successfully logged in' />
     </div>

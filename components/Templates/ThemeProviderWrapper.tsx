@@ -1,8 +1,9 @@
 'use client';
 
+import { PaletteMode, Theme, createTheme, ThemeProvider } from '@mui/material/styles';
 import { ThemeColor, ColorGroup } from '@/lib/theme/colors';
 import { createContext, useState, useEffect, useMemo } from 'react';
-import { PaletteMode, Theme, createTheme, ThemeProvider } from '@mui/material/styles';
+import useLoading from '@/lib/hooks/useLoading';
 import { grey } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -21,6 +22,7 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
   const [mode, setMode] = useState<PaletteMode>('light');
   const [color, setColor] = useState<ThemeColor>(ThemeColor.blue);
   const [mounted, setMounted] = useState(false);
+  const { setLoading } = useLoading();
   const colors = ColorGroup[color];
 
   useEffect(() => {
@@ -46,17 +48,23 @@ export function ThemeProviderWrapper({ children }: { children: React.ReactNode }
     setMounted(true);
   }, []);
 
-  const toggleMode = () => setMode(prev => {
-    const newMode = prev === 'light' ? 'dark' : 'light';
-    localStorage.setItem('themeMode', newMode);
-    return newMode;
-  });
+  const toggleMode = async () => {
+    setLoading(true);
+    setMode(prev => {
+      const newMode = prev === 'light' ? 'dark' : 'light';
+      localStorage.setItem('themeMode', newMode);
+      return newMode;
+    });
+    setLoading(false);
+  };
 
-  const toggleColor = (newColor: ThemeColor) => {
+  const toggleColor = async (newColor: ThemeColor) => {
+    setLoading(true);
     if (newColor != color) {
       setColor(newColor);
       localStorage.setItem('themeColor', newColor);
     }
+    setLoading(false);
   };
 
   const theme = useMemo(

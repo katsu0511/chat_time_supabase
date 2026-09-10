@@ -1,29 +1,45 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/infrastructure/supabaseBrowser';
+import useLoading from '@/lib/hooks/useLoading';
 import FriendList from '@/components/Organisms/FriendList';
 import ChatScreen from '@/components/Organisms/ChatScreen';
 
 export default function Messages({ user, friends }: { user: AppUser, friends: AppUser[] }) {
+  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [chattingFriend, setChattingFriend] = useState<AppUser | undefined>();
+  const { loading, setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const friendRef = useRef<AppUser>(chattingFriend);
 
-  const getMessages = useCallback(async (friend: AppUser) => {
-    setChattingFriend(friend);
-    const res = await fetch(`/api/getMessages?friendId=${friend.id}`);
-    if (!res.ok) {
+  const getMessages = async (friend: AppUser) => {
+    if (friendRef.current?.id !== friend.id) {
+      setLoading(true);
       setMessages([]);
-      return;
+      setMessage('');
+      setChattingFriend(friend);
     }
-    const contents: Message[] = await res.json();
-    setMessages(contents);
-  }, []);
+
+    const res = await fetch(`/api/getMessages?friendId=${friend.id}`);
+
+    if (res.ok) {
+      const contents: Message[] = await res.json();
+      setMessages(contents);
+    } else {
+      const data = await res.json();
+      setErrorMessage(data.error);
+      setDisplayErrorModal(true);
+    }
+
+    setLoading(false);
+  };
 
   const backToFriendList = () => {
-    setMessages([]);
-    setChattingFriend(undefined);
+    if (!loading) {
+      setMessages([]);
+      setChattingFriend(undefined);
+    }
   };
 
   useEffect(() => {
@@ -70,10 +86,14 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
     };
   }, [user]);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
   return (
     <div className='block w-full h-full md:flex md:border-[color:var(--color-primary)] md:border-x-4'>
       <FriendList friends={friends} chattingFriend={chattingFriend} getMessages={getMessages} />
-      <ChatScreen user={user} friend={chattingFriend} messages={messages} onBackToFriendList={backToFriendList} />
+      <ChatScreen user={user} friend={chattingFriend} messages={messages} message={message} setMessage={setMessage} onBackToFriendList={backToFriendList} />
     </div>
   );
 }

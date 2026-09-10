@@ -1,5 +1,7 @@
 'use client';
 
+import useLoading from '@/lib/hooks/useLoading';
+
 type Props = {
   friends: AppUser[]
   chattingFriend: AppUser | undefined
@@ -7,7 +9,9 @@ type Props = {
 };
 
 export default function FriendList({ friends, chattingFriend, getMessages }: Props) {
+  const { loading } = useLoading();
   const displayFriendList = chattingFriend && 'hidden';
+  const buttonClassName = loading ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-[color:var(--color-secondary)] hover:shadow-xl';
 
   return (
     <div className={`${displayFriendList} w-full h-full md:block md:w-[30%]`}>
@@ -15,7 +19,8 @@ export default function FriendList({ friends, chattingFriend, getMessages }: Pro
         {friends.map(friend => (
           <li key={friend.id} className='w-full h-24 border-[color:var(--color-secondary)] border-b-1'>
             <button
-              className={`w-full h-full p-2 cursor-pointer duration-300 ${chattingFriend?.id === friend.id && 'bg-[color:var(--color-secondary)] shadow-xl'} hover:bg-[color:var(--color-secondary)] hover:shadow-xl`}
+              disabled={loading}
+              className={`w-full h-full p-2 duration-300 ${chattingFriend?.id === friend.id && 'bg-[color:var(--color-secondary)] shadow-xl'} ${buttonClassName}`}
               onClick={() => getMessages(friend)}
             >
               <p className='w-full h-[50%] text-2xl leading-10 text-left'>{friend.name}</p>

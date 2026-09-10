@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import useLoading from '@/lib/hooks/useLoading';
 import { ThemeContext } from '@/components/Templates/ThemeProviderWrapper';
 import Heading from '@/components/Atoms/Heading';
 import { Input } from '@mui/material';
@@ -9,10 +10,7 @@ import UserList from '@/components/Molecules/UserList';
 export default function SearchUsers(props: {user: AppUser, friendIds: string[]}) {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [friendIds, setFriendIds] = useState<string[]>(props.friendIds);
-
-  const context = useContext(ThemeContext);
-  if (!context) return null;
-  const { colors } = context;
+  const { loading, setLoading } = useLoading();
 
   const searchUsers = async (name: string) => {
     name = name.trim();
@@ -20,8 +18,10 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
       setUsers([]);
       return;
     }
+
     let users: AppUser[] = [];
     const res = await fetch(`/api/getUsersByName?name=${name}`);
+
     if (res.ok) users = await res.json();
     setUsers(users);
   };
@@ -30,11 +30,20 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
     setFriendIds((prev) => [...prev, newFriendId]);
   };
 
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading]);
+
+  const context = useContext(ThemeContext);
+  if (!context) return null;
+  const { colors } = context;
+
   return (
     <div className='w-full h-full'>
       <Heading title='Search Users' />
       <Input
         disableUnderline
+        disabled={loading}
         sx={{
           display: 'block',
           width: '100%',
@@ -47,11 +56,12 @@ export default function SearchUsers(props: {user: AppUser, friendIds: string[]})
           sx: {
             display: 'block',
             border: '2px solid',
-            borderColor: colors.main,
+            borderColor: loading ? '#9CA3AF' : colors.main,
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
             p: 1,
+            cursor: loading ? 'not-allowed' : 'text',
             appearance: 'none'
           }
         }}
