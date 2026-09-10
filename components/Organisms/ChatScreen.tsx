@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
+import { Dispatch, SetStateAction, useState, useRef, useEffect } from 'react';
 import useLoading from '@/lib/hooks/useLoading';
 import Image from 'next/image';
 import MessageContent from '@/components/Molecules/MessageContent';
@@ -17,6 +17,7 @@ type Props = {
 };
 
 export default function ChatScreen({ user, friend, messages, message, setMessage, onBackToFriendList }: Props) {
+  const [sendingMessage, setSendingMessage] = useState('');
   const { sendingState } = useLoading();
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
@@ -49,7 +50,7 @@ export default function ChatScreen({ user, friend, messages, message, setMessage
         {
           sendingState &&
           <div className='flex justify-end items-center gap-[10px] pr-5 pb-2'>
-            <span className='animate-pulse'>Sending...</span>
+            <span className='animate-pulse'>{sendingMessage}</span>
             <CircularProgress size={24} />
           </div>
         }
@@ -57,7 +58,7 @@ export default function ChatScreen({ user, friend, messages, message, setMessage
       {
         friend?.id === undefined
         ? <div className='bg-[color:var(--light-secondary)] w-full h-10'></div>
-        : <SendMessage receiverId={friend.id} message={message} setMessage={setMessage} />
+        : <SendMessage receiverId={friend.id} message={message} setMessage={setMessage} setSendingMessage={setSendingMessage} />
       }
     </div>
   );
