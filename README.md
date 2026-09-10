@@ -40,9 +40,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Prepare .env file
 
 ```
-DATABASE_URL="URL of the database you are using"
-DATABASE_USER="User name of the database"
-DATABASE_PASSWORD="Password of the database"
-DATABASE_NAME="Name of the database"
-NODE_ENV="dev"
+DATABASE_URL="URL of the supabase database you are using"
+ORIGIN_URL="Cross origin URL that you allow to access to the API of this App"
+NEXT_PUBLIC_SUPABASE_URL="URL of the supabase project"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="publishable key of supabase"
+SUPABASE_SECRET_KEY="secret key of supabase"
+GEMINI_API_KEY="Your API key of Gemini account"
 ```
