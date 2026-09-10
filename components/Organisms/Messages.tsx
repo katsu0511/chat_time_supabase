@@ -10,7 +10,7 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [chattingFriend, setChattingFriend] = useState<AppUser | undefined>();
-  const { setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
+  const { loading, setLoading, setErrorMessage, setDisplayErrorModal } = useLoading();
   const friendRef = useRef<AppUser>(chattingFriend);
 
   const getMessages = async (friend: AppUser) => {
@@ -36,8 +36,10 @@ export default function Messages({ user, friends }: { user: AppUser, friends: Ap
   };
 
   const backToFriendList = () => {
-    setMessages([]);
-    setChattingFriend(undefined);
+    if (!loading) {
+      setMessages([]);
+      setChattingFriend(undefined);
+    }
   };
 
   useEffect(() => {
