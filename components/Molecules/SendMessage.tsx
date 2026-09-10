@@ -9,15 +9,17 @@ type Props = {
   receiverId: string | undefined
   message: string
   setMessage: Dispatch<SetStateAction<string>>
+  setSendingMessage: Dispatch<SetStateAction<string>>
 };
 
-export default function SendMessage({ receiverId, message, setMessage }: Props) {
+export default function SendMessage({ receiverId, message, setMessage, setSendingMessage }: Props) {
   const { loading, setLoading, setSendingState, setErrorMessage, setDisplayErrorModal } = useLoading();
   const context = useContext(ThemeContext);
   if (!context) return null;
   const { theme } = context;
 
   const sendMessage = async (content: string) => {
+    setSendingMessage('Checking...');
     setLoading(true);
     setSendingState(true);
     setMessage('');
@@ -31,6 +33,8 @@ export default function SendMessage({ receiverId, message, setMessage }: Props) 
       return;
     }
 
+    setSendingMessage('Translating...');
+
     const res = await fetch('/api/sendMessage', {
       method: 'POST',
       headers: {
@@ -38,6 +42,8 @@ export default function SendMessage({ receiverId, message, setMessage }: Props) 
       },
       body: JSON.stringify({ receiverId, content }),
     });
+
+    setSendingMessage('Sending...');
 
     if (!res.ok) {
       const data = await res.json();
