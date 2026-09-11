@@ -1,3 +1,5 @@
+'use server';
+
 import prisma from '@/lib/infrastructure/prisma';
 
 export async function getUser(id: string): Promise<AppUser | null> {
