@@ -3,7 +3,8 @@
 import { Dispatch, SetStateAction, useState, useRef, useEffect } from 'react';
 import useLoading from '@/lib/hooks/useLoading';
 import Image from 'next/image';
-import MessageContent from '@/components/Molecules/MessageContent';
+import dayjs from 'dayjs';
+import MessageGroup from '@/components/Organisms/MessageGroup';
 import { CircularProgress } from '@mui/material';
 import SendMessage from '@/components/Molecules/SendMessage';
 
@@ -22,6 +23,7 @@ export default function ChatScreen({ user, friend, messages, message, setMessage
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const displayChatScreen = friend?.id === undefined ? 'hidden' : 'block';
   const heightOfMessageContent = window.innerWidth < 768 ? 'h-[calc(100dvh-160px)] min-h-[calc(100dvh-160px)]' : 'h-[calc(100dvh-120px)] min-h-[calc(100dvh-120px)]';
+  const messageArray: Message[] = [];
 
   useEffect(() => {
     messageContainerRef.current?.scrollTo({
@@ -44,9 +46,17 @@ export default function ChatScreen({ user, friend, messages, message, setMessage
         <span className='text-black text-xl font-bold pl-4'>{friend?.name}</span>
       </div>
       <div ref={messageContainerRef} className={`bg-[color:var(--light-secondary)] w-full ${heightOfMessageContent} overflow-y-auto`}>
-        {messages.map(message => (
-          <MessageContent key={message.messageId} userId={user.id} message={message} />
-        ))}
+        {messages.map((message, index) => {
+          messageArray.push(message);
+          const nextMessage = messages[index + 1];
+          const isLast = !nextMessage || dayjs(message.createdAt).format('YYYY-MM-DD') !== dayjs(nextMessage.createdAt).format('YYYY-MM-DD');
+          if (isLast) {
+            const messageContents = [...messageArray];
+            messageArray.splice(0);
+            return <MessageGroup key={message.messageId} userId={user.id} messages={messageContents} createdAt={message.createdAt} />;
+          }
+          return null;
+        })}
         {
           sendingState &&
           <div className='flex justify-end items-center gap-[10px] pr-5 pb-2'>
