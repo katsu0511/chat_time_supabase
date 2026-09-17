@@ -1,7 +1,7 @@
 import type { User as AuthUser } from '@supabase/supabase-js';
 import FooterLink from '@/components/Atoms/FooterLink';
 
-export default async function Footer({user}: {user: AuthUser | null}) {
+export default async function Footer({ user }: { user: AuthUser | null }) {
   return (
     <footer className='fixed bottom-0 bg-[color:var(--color-primary)] w-full h-10 z-10'>
       {user
