@@ -40,8 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Prepare .env file
 
 ```
-DATABASE_URL="URL of the supabase database you are using"
-ORIGIN_URL="Cross origin URL that you allow to access to the API of this App"
+DATABASE_URL_SUPABASE="URL of the supabase database you are using"
 NEXT_PUBLIC_SUPABASE_URL="URL of the supabase project"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="publishable key of supabase"
 SUPABASE_SECRET_KEY="secret key of supabase"
